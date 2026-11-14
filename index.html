@@ -195,10 +195,26 @@
       46%, 64%  { opacity: 1; }   /* fully faded into light portrait */
       92%, 100% { opacity: 0; }   /* eases back to dark, then repeats */
     }
+    /* Scroll-triggered portrait: hidden at the top, fades in once scrolling begins */
+    .hero-portrait-scroll {
+      opacity: 0;
+      z-index: 3;
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    body.is-scrolling .hero-portrait-scroll {
+      opacity: 1;
+    }
+    /* While scrolled, stop the dark→light loop so only the red-rim portrait shows */
+    body.is-scrolling .hero-portrait-fade {
+      animation-play-state: paused;
+    }
     @media (prefers-reduced-motion: reduce) {
       .hero-portrait-fade {
         animation: none;
         opacity: 1; /* settle on the light portrait, no motion */
+      }
+      .hero-portrait-scroll {
+        transition: none; /* instant swap, no motion */
       }
     }
 
@@ -345,6 +361,11 @@
                alt=""
                aria-hidden="true"
                class="hero-portrait-img hero-portrait-fade" />
+          <!-- Red rim-light portrait (fades in only once scrolling begins) -->
+          <img src="assets/portrait-scroll.png"
+               alt=""
+               aria-hidden="true"
+               class="hero-portrait-img hero-portrait-scroll" />
         </div>
       </div>
 
@@ -1422,5 +1443,22 @@
   </script>
   <script type="module" src="./scroll-expand-media.js"></script>
   <script type="module" src="./experience-section.js"></script>
+
+  <!-- Hero portrait: switch to the red rim-light portrait once scrolling begins -->
+  <script>
+    (function () {
+      var THRESHOLD = 30; // px of scroll before the portrait changes
+      var ticking = false;
+      function sync() {
+        ticking = false;
+        var scrolled = (window.scrollY || window.pageYOffset || 0) > THRESHOLD;
+        document.body.classList.toggle('is-scrolling', scrolled);
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(sync); }
+      }, { passive: true });
+      sync(); // set correct state on load (e.g. refresh mid-page)
+    })();
+  </script>
 </body>
 </html>
