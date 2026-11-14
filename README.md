@@ -1,7 +1,7 @@
 <table>
   <tr>
     <td width="300" valign="top">
-      <img src="assets/suchi-bansal.png" width="300" alt="Suchi Bansal" />
+      <img src="assets/hero_portrait.png" width="300" alt="Suchi Bansal" />
     </td>
     <td valign="top">
       <h1>Suchi Bansal</h1>
