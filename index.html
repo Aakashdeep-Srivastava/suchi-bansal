@@ -172,6 +172,36 @@
       -webkit-mask-image: linear-gradient(to bottom, black 65%, transparent 100%);
     }
 
+    /* Hero portrait crossfade (dark -> light) */
+    .hero-portrait-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: bottom;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backface-visibility: hidden;
+    }
+    .hero-portrait-fade {
+      opacity: 0;
+      will-change: opacity;
+      animation: heroPortraitFade 7s ease-in-out infinite;
+    }
+    @keyframes heroPortraitFade {
+      0%, 18%   { opacity: 0; }   /* dark portrait visible */
+      46%, 64%  { opacity: 1; }   /* fully faded into light portrait */
+      92%, 100% { opacity: 0; }   /* eases back to dark, then repeats */
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-portrait-fade {
+        animation: none;
+        opacity: 1; /* settle on the light portrait, no motion */
+      }
+    }
+
     /* Accordion transition styles */
     .accordion-content {
       max-height: 0;
@@ -306,10 +336,15 @@
       <!-- Center Column: Stylized Black and White Headshot (in front of text) -->
       <div class="md:col-span-6 flex justify-center order-1 md:order-2 relative z-10 -mt-16 md:-mt-36">
         <div class="relative w-[320px] h-[400px] md:w-[480px] md:h-[580px] flex items-end justify-center hero-portrait-mask">
-          <img src="assets/hero_portrait.png"
+          <!-- Dark portrait (base layer) -->
+          <img src="assets/portrait-dark.png"
                alt="Suchi Bansal — Senior Product Manager"
-               class="w-full h-full object-contain object-bottom pointer-events-none select-none transition-transform duration-700 hover:scale-[1.02]"
-               onerror="this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuCcazn9gQbymIOQnywium-Vsjyj8kV2UoFlH63M0RX3nV0Z_2LZD-rugA9K0ORrfrFxJEkOBrlAyB0HWB8cm7KhZp-5sNgQuhXyGzJ9WmwvjEDhYw_g3BAr4A9j5phGh8JE5Rka_2e_B_o51jY55CQt5wfTPsFDGRvU2gaHKRu4gOOZD_FnQOszLiRDTh3La-RZzzHeFwfFY3XPZ9ikMq55oZ_xP2A95rzfUQE8WkHuIogtKLU-9zuSV9QywgCsVw4Btw'">
+               class="hero-portrait-img" />
+          <!-- Light portrait (crossfades in over the dark one: dark → light) -->
+          <img src="assets/portrait-light.png"
+               alt=""
+               aria-hidden="true"
+               class="hero-portrait-img hero-portrait-fade" />
         </div>
       </div>
 
