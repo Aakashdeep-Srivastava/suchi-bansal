@@ -1,13 +1,26 @@
-# Suchi Bansal — Portfolio
-
-<div align="center">
-
-**Senior Product Manager · AI & Enterprise Products · Product Strategy · GTM · SaaS**
-
-A monochrome editorial portfolio presenting 11+ years of building AI-powered consumer and
-enterprise products across mobility, SaaS, workflow automation, and cybersecurity.
-
-</div>
+<table>
+  <tr>
+    <td width="300" valign="top">
+      <img src="assets/suchi-bansal.png" width="300" alt="Suchi Bansal" />
+    </td>
+    <td valign="top">
+      <h1>Suchi Bansal</h1>
+      <p><strong>Senior Product Manager · AI &amp; Enterprise Products</strong></p>
+      <p>Product Strategy · GTM · SaaS · Product Lifecycle · AI/ML</p>
+      <p>
+        11+ years building AI-powered consumer and enterprise products used by millions —
+        across mobility, SaaS, workflow automation, and cybersecurity.
+      </p>
+      <p>
+        📍 Gurugram, Haryana, India<br>
+        📧 <a href="mailto:suchiban07@gmail.com">suchiban07@gmail.com</a><br>
+        📱 +91 83779 51131<br>
+        🔗 <a href="https://www.linkedin.com/in/suchi-bansal-productmanager-ai">LinkedIn</a><br>
+        🌐 <a href="https://suchibansal.vercel.app">suchibansal.vercel.app</a>
+      </p>
+    </td>
+  </tr>
+</table>
 
 ---
 
