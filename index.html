@@ -208,6 +208,16 @@
     body.is-scrolling .hero-portrait-fade {
       animation-play-state: paused;
     }
+    /* Colored portrait: hidden by default (monochrome shows); revealed on hover / touch */
+    .hero-portrait-color {
+      opacity: 0;
+      z-index: 4;
+      transition: opacity 0.45s ease;
+    }
+    .hero-portrait-mask:hover .hero-portrait-color,
+    .hero-portrait-mask.is-touching .hero-portrait-color {
+      opacity: 1;
+    }
     @media (prefers-reduced-motion: reduce) {
       .hero-portrait-fade {
         animation: none;
@@ -215,6 +225,9 @@
       }
       .hero-portrait-scroll {
         transition: none; /* instant swap, no motion */
+      }
+      .hero-portrait-color {
+        transition: none; /* instant colorize, no motion */
       }
     }
 
@@ -366,6 +379,11 @@
                alt=""
                aria-hidden="true"
                class="hero-portrait-img hero-portrait-scroll" />
+          <!-- Colored portrait (comes to life on hover / touch, grayscale otherwise) -->
+          <img src="assets/portrait-color.png"
+               alt=""
+               aria-hidden="true"
+               class="hero-portrait-img hero-portrait-color" />
         </div>
       </div>
 
@@ -1458,6 +1476,16 @@
         if (!ticking) { ticking = true; requestAnimationFrame(sync); }
       }, { passive: true });
       sync(); // set correct state on load (e.g. refresh mid-page)
+
+      // Mobile: colorize the portrait while a finger is touching the face
+      var portrait = document.querySelector('.hero-portrait-mask');
+      if (portrait) {
+        var on = function () { portrait.classList.add('is-touching'); };
+        var off = function () { portrait.classList.remove('is-touching'); };
+        portrait.addEventListener('touchstart', on, { passive: true });
+        portrait.addEventListener('touchend', off, { passive: true });
+        portrait.addEventListener('touchcancel', off, { passive: true });
+      }
     })();
   </script>
 </body>
