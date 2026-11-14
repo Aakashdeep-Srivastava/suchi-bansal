@@ -218,6 +218,67 @@
     .hero-portrait-mask.is-touching .hero-portrait-color {
       opacity: 1;
     }
+    /* After a double-click: force black & white even while hovering/touching */
+    .hero-portrait-mask.force-mono .hero-portrait-color {
+      opacity: 0 !important;
+    }
+
+    /* Double-click heart pop (Instagram-style) */
+    .hero-heart {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      width: 100px;
+      height: 100px;
+      transform: translate(-50%, -50%) scale(0.2);
+      opacity: 0;
+      z-index: 10;
+      pointer-events: none;
+      color: #ff2d55; /* colored heart */
+      filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.45));
+    }
+    .hero-heart.pop {
+      animation: heartPop 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes heartPop {
+      0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+      20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15); }
+      40%  { transform: translate(-50%, -50%) scale(0.9); }
+      60%  { opacity: 0.95; transform: translate(-50%, -50%) scale(1.02); }
+      100% { opacity: 0; transform: translate(-50%, -52%) scale(1.3); }
+    }
+
+    /* Collected-hearts badge */
+    #heart-collector {
+      position: fixed;
+      left: 1.25rem;
+      bottom: 1.25rem;
+      z-index: 50;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.9rem;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid #E5E5E5;
+      box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(6px);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #121212;
+      user-select: none;
+    }
+    #heart-collector svg { width: 18px; height: 18px; color: #ff2d55; }
+    #heart-collector.bump { animation: heartBump 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes heartBump {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.18); }
+      100% { transform: scale(1); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-heart.pop { animation-duration: 0.01s; }
+      #heart-collector.bump { animation: none; }
+    }
     @media (prefers-reduced-motion: reduce) {
       .hero-portrait-fade {
         animation: none;
@@ -384,6 +445,10 @@
                alt=""
                aria-hidden="true"
                class="hero-portrait-img hero-portrait-color" />
+          <!-- Double-click heart: pops, then snaps the portrait back to black & white -->
+          <svg class="hero-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+          </svg>
         </div>
       </div>
 
@@ -1462,6 +1527,14 @@
   <script type="module" src="./scroll-expand-media.js"></script>
   <script type="module" src="./experience-section.js"></script>
 
+  <!-- Collected hearts badge -->
+  <div id="heart-collector" title="Hearts collected">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+    </svg>
+    <span id="heart-count">0</span>
+  </div>
+
   <!-- Hero portrait: switch to the red rim-light portrait once scrolling begins -->
   <script>
     (function () {
@@ -1481,10 +1554,56 @@
       var portrait = document.querySelector('.hero-portrait-mask');
       if (portrait) {
         var on = function () { portrait.classList.add('is-touching'); };
-        var off = function () { portrait.classList.remove('is-touching'); };
+        var off = function () { portrait.classList.remove('is-touching'); portrait.classList.remove('force-mono'); };
         portrait.addEventListener('touchstart', on, { passive: true });
         portrait.addEventListener('touchend', off, { passive: true });
         portrait.addEventListener('touchcancel', off, { passive: true });
+
+        // Double-click / double-tap: pop a heart, collect it, snap back to B&W
+        var heart = portrait.querySelector('.hero-heart');
+        var collector = document.getElementById('heart-collector');
+        var countEl = document.getElementById('heart-count');
+        var STORE_KEY = 'suchi-hearts';
+        var count = 0;
+        try { count = parseInt(localStorage.getItem(STORE_KEY) || '0', 10) || 0; } catch (e) {}
+        if (countEl) countEl.textContent = count;
+
+        function likePortrait() {
+          // Heart pop over the portrait
+          if (heart) {
+            heart.classList.remove('pop');
+            void heart.offsetWidth; // restart the animation
+            heart.classList.add('pop');
+          }
+          // Snap back to black & white (overrides hover/touch until pointer leaves)
+          portrait.classList.add('force-mono');
+          // Collect the heart
+          count += 1;
+          if (countEl) countEl.textContent = count;
+          try { localStorage.setItem(STORE_KEY, String(count)); } catch (e) {}
+          if (collector) {
+            collector.classList.remove('bump');
+            void collector.offsetWidth;
+            collector.classList.add('bump');
+          }
+        }
+
+        // Desktop double-click
+        portrait.addEventListener('dblclick', likePortrait);
+        // Release the forced B&W once the cursor leaves, so hover re-colors again
+        portrait.addEventListener('mouseleave', function () {
+          portrait.classList.remove('force-mono');
+        });
+        // Mobile double-tap detection
+        var lastTap = 0;
+        portrait.addEventListener('touchend', function () {
+          var now = Date.now();
+          if (now - lastTap < 320) { likePortrait(); lastTap = 0; }
+          else { lastTap = now; }
+        }, { passive: true });
+        if (heart) {
+          heart.addEventListener('animationend', function () { heart.classList.remove('pop'); });
+        }
       }
     })();
   </script>
