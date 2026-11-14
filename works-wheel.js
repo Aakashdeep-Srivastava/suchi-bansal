@@ -35,70 +35,70 @@ function place(ringDeg, drumDeg, ringR, drumR, bow, m) {
 
 export const DEFAULT_WORKS = [
   {
-    title: "Aether AI",
-    subtitle: "Cognitive Workspace & Deep Reasoning",
-    description: "A cognitive workspace engineered for deep systemic research, disciplined reasoning, and structural synthesis with real-time active node synthesis.",
+    title: "Samsung Health AI",
+    subtitle: "Medication, Snore & Sleep Coach",
+    description: "AI-powered digital health features across Samsung mobile and wearables — Medication Tracking, Snore Detection, and Sleep Coach — serving 7M+ global users.",
     image: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.25\u202fPM.png",
     src: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.25\u202fPM.png",
-    href: "#aether-ai",
-    stats: "Active Node Engine • Systemic Synthesis • Structural Research",
-    tools: ["React", "TypeScript", "Tailwind CSS", "AI Engine"],
-    deliverables: ["Cognitive Workspace UI", "Active Node Telemetry", "Interactive Reasoning Canvas"]
+    href: "#samsung-health",
+    stats: "7M+ Users • 25% Adoption in 6 Months • 200%+ QoQ Watch Growth",
+    tools: ["LLM/RAG", "Machine Learning", "Jira", "Mixpanel"],
+    deliverables: ["Product Vision & Roadmap", "AI Feature Discovery", "Adoption & Engagement Analytics"]
   },
   {
-    title: "Aether Protocol",
-    subtitle: "Private Preview & Monolithic Deployment",
-    description: "Exclusive onboarding portal and architectural briefing interface engineered for research scientists, architectural principals, and technical executives.",
+    title: "Make for India",
+    subtitle: "Ultra Data Saving & S-Bike Mode",
+    description: "Flagship localized smartphone features driving 60% and 50% user adoption and supporting 8M+ device sales across Samsung's affordable portfolio.",
     image: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.43\u202fPM.png",
     src: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.43\u202fPM.png",
-    href: "#aether-protocol",
-    stats: "Version 4.5.2 • Monolithic Core Stability • Immediate Deployment",
-    tools: ["Next.js", "TypeScript", "Tailwind CSS", "Figma"],
-    deliverables: ["Briefing Reservation Portal", "Monolithic Design System", "Executive Onboarding Flow"]
+    href: "#make-for-india",
+    stats: "UDS 60% • S-Bike Mode 50% • 8M+ Devices Sold",
+    tools: ["Agile", "Azure DevOps", "Google Analytics", "Tableau"],
+    deliverables: ["Product Requirements", "Backlog Prioritization", "Agile Delivery with Engineering"]
   },
   {
-    title: "Afterform S01",
-    subtitle: "Brutalist Campaign & Visual Monograph",
-    description: "A seasonal fashion campaign and visual monograph capturing structural streetwear silhouettes framed against raw monolithic concrete architecture.",
+    title: "Market Intelligence Board",
+    subtitle: "Automated Competitive Intelligence",
+    description: "An automated Market Intelligence Board (MIB) that streamlined competitive intelligence gathering and accelerated strategic decision-making across the India portfolio.",
     image: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.28\u202fPM.png",
     src: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.28\u202fPM.png",
-    href: "#afterform-s01",
-    stats: "Campaign S01 • Frame Ref: 35mm_Exp_09 • Visual Monograph",
-    tools: ["Next.js", "Tailwind CSS", "Figma", "Lenis Scroll"],
-    deliverables: ["Visual Monograph Experience", "High-Resolution Lookbook", "Seasonal Campaign Direction"]
+    href: "#market-intelligence",
+    stats: "2,000+ Insights Evaluated • 25% Better Segmentation",
+    tools: ["SQL", "Power BI", "Tableau", "Pendo"],
+    deliverables: ["Competitive Intelligence Automation", "Market Sensing Dashboards", "Data-Driven Decisioning"]
   },
   {
-    title: "Afterform System",
-    subtitle: "Brutalist Apparel & Brand Manifesto",
-    description: "A monolithic architectural apparel manifesto stripping garments of emblems and logos, focusing on pure volume, silhouette, and human-concrete alignment.",
+    title: "Startup Summit 2025",
+    subtitle: "AI, HealthTech & DeepTech Innovation",
+    description: "Spearheaded Startup Summit 2025, bringing together India's leading AI, HealthTech, and DeepTech startups to foster innovation and strategic collaborations.",
     image: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.46\u202fPM.png",
     src: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.46\u202fPM.png",
-    href: "#afterform-system",
-    stats: "Tokyo Studio • Berlin Lab • Seoul Showroom",
-    tools: ["React", "Tailwind CSS", "Figma", "GSAP"],
-    deliverables: ["Brand Manifesto Landing Page", "Brutalist Lookbook System", "E-Commerce Catalog Layout"]
+    href: "#startup-summit",
+    stats: "Startup Summit 2025 • Academic Summit 1.0 • Strategic Partnerships",
+    tools: ["Stakeholder Management", "Partnerships", "GTM", "Innovation"],
+    deliverables: ["Summit Program Direction", "Partnership Ecosystem", "Innovation Pipeline"]
   },
   {
-    title: "Maison Éléara",
-    subtitle: "Fine Jewellery & Parisian Atelier",
-    description: "An haute jewellery boutique celebrating sculpted contours in heavy fairmined gold born from geological stillness, crafted in Paris Place Vendôme.",
+    title: "Ecocreds",
+    subtitle: "Sustainability Product — CESD Hackathon",
+    description: "A sustainability platform rewarding responsible consumer behavior through carbon-credit incentives and gamification, incentivizing 1,000+ sustainable actions.",
     image: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.03\u202fPM.png",
     src: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.03\u202fPM.png",
-    href: "#maison-eleara",
-    stats: "Place Vendôme Atelier • 18k Recycled Gold • Aurelia Torc & Drops",
-    tools: ["Figma", "React", "Tailwind CSS", "High-Precision Typography"],
-    deliverables: ["Fine Jewellery Boutique", "Atelier Concierge Interface", "Artisanal Archive Showcase"]
+    href: "#ecocreds",
+    stats: "1,000+ Sustainable Actions • 15–20% Projected Footprint Cut",
+    tools: ["Product Discovery", "Figma", "RICE Framework", "Gamification"],
+    deliverables: ["Product Vision & Roadmap", "Reward Mechanics", "Go-to-Market Strategy"]
   },
   {
-    title: "Éléara Campaign",
-    subtitle: "Campaign Edition Vol. IX — Sandstone Edit",
-    description: "An organic editorial campaign highlighting sculpted gold signet jewellery set against raw geological sandstone formations, with private salon concierge booking.",
+    title: "EcoVoyage & ReachifyMe",
+    subtitle: "Carbon Offset SaaS • GenAI GTM",
+    description: "EcoVoyage — a B2B/B2C Carbon Offset as a Service platform — and ReachifyMe — a US go-to-market strategy for an AI professional-branding product that cut CAC by 75%.",
     image: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.42\u202fPM.png",
     src: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.42\u202fPM.png",
-    href: "#eleara-campaign",
-    stats: "Campaign Edition Vol. IX • Sandstone Geology • Atelier Concierge",
-    tools: ["WebGL", "Three.js", "Tailwind CSS", "Smooth Scroll"],
-    deliverables: ["Campaign Lookbook Experience", "Private Salon Reservation Portal", "Sensory Art Direction"]
+    href: "#ecovoyage-reachifyme",
+    stats: "₹150+ Crore 3-Yr Target • 75% Lower CAC",
+    tools: ["Pricing Strategy", "Monetization", "Personas", "Positioning"],
+    deliverables: ["Monetization Models", "GTM & Growth Experiments", "Partnership Ecosystem"]
   }
 ];
 

@@ -5,51 +5,51 @@ export const photo = (id) => `https://images.unsplash.com/${id}?w=1200&q=80&auto
 export const DEFAULT_ITEMS = [
   {
     src: 'Project Images/Cafe Website.png',
-    alt: 'Cafe Website',
-    title: 'Cafe Website',
-    subtitle: 'Editorial Coffee House Experience',
-    description: 'A full-stack cafe management system with an admin portal for orders, menu, and reservations',
-    link: 'https://mochaandmiso.web.app/'
+    alt: 'Samsung Digital Health',
+    title: 'Samsung Digital Health',
+    subtitle: 'AI Health Features for 7M+ Users',
+    description: 'Medication Tracking, Snore Detection, and Sleep Coach — AI-powered wellness features reaching 25% adoption within six months across Samsung mobile and wearables.',
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
   },
   {
     src: 'Project Images/Design Studio.png',
-    alt: 'Design Studio',
-    title: 'Design Studio',
-    subtitle: 'Creative Agency & Brand Identity',
-    description: 'A bold design studio website built to showcase creative services, brand identity, and digital experiences',
-    link: 'https://echo-design-studio-ex.vercel.app/'
+    alt: 'Make for India',
+    title: 'Make for India',
+    subtitle: 'Ultra Data Saving & S-Bike Mode',
+    description: 'Flagship "Make for India" smartphone features driving 60% and 50% user adoption and supporting 8M+ device sales in the affordable segment.',
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
   },
   {
     src: 'Project Images/Photographer Portfolio.png',
-    alt: 'Photographer Portfolio',
-    title: 'Photographer Portfolio',
-    subtitle: 'Editorial & Analog Photography',
-    description: 'An analog & editorial photography portfolio showcasing timeless visual stories',
-    link: 'https://julianvance.vercel.app/'
+    alt: 'Ecocreds',
+    title: 'Ecocreds',
+    subtitle: 'Sustainability Product — CESD Hackathon',
+    description: 'A sustainability platform rewarding responsible consumer behavior through carbon-credit incentives and gamification, incentivizing 1,000+ sustainable actions.',
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
   },
   {
     src: 'Project Images/Portfolio Design.png',
-    alt: 'Portfolio Design',
-    title: 'Portfolio Design',
-    subtitle: 'Minimalist Creative Developer Portfolio',
-    description: 'A sleek, high-performance portfolio crafted with modern typography, fluid interactions, and curated creative work.',
-    link: 'https://echooo.web.app/'
+    alt: 'EcoVoyage',
+    title: 'EcoVoyage',
+    subtitle: 'Carbon Offset as a Service',
+    description: 'A scalable B2B and B2C carbon-offset platform with subscription and corporate-partnership monetization targeting ₹150+ Crore revenue within three years.',
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
   },
   {
     src: 'Project Images/Portfolio Website.png',
-    alt: 'Portfolio Website',
-    title: 'Portfolio Website',
-    subtitle: 'Personal Developer & Designer Portfolio',
-    description: 'A personal portfolio highlighting full-stack engineering, interactive UI components, and modern web craft.',
-    link: 'https://jishnumondal.vercel.app/'
+    alt: 'ReachifyMe',
+    title: 'ReachifyMe',
+    subtitle: 'GenAI GTM Strategy',
+    description: 'Complete US go-to-market strategy for an AI-powered professional branding platform — acquisition, pricing, and positioning that cut customer acquisition cost by 75%.',
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
   },
   {
     src: 'Project Images/Sen Cruzo-Client Portfolio.png',
-    alt: 'Sen Cruzo',
-    title: 'Sen Cruzo',
-    subtitle: 'Luxury Architectural & Client Portfolio',
-    description: 'A bespoke editorial portfolio designed for high-profile client presentation, featuring immersive layouts and architectural visual storytelling.',
-    link: 'https://sencruzo.web.app/'
+    alt: 'Canon Enterprise Software Portfolio',
+    title: 'Canon Enterprise Portfolio',
+    subtitle: '$100M+ Enterprise SaaS',
+    description: 'Strategy and lifecycle for a $100M+ enterprise software portfolio across workflow automation, print management, and cybersecurity — 30+ solutions and ~$30M revenue.',
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
   }
 ];
 
