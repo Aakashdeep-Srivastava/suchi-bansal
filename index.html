@@ -587,8 +587,8 @@
     <!-- Right Social & Menu Links -->
     <div class="flex items-center gap-1.5 md:gap-2 p-1.5 bg-white/95 border border-[#E2E2E2] rounded-full shadow-sm">
       <!-- Résumé (recruiters) -->
-      <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" title="View résumé (PDF)"
-         class="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-black text-white text-[11px] font-bold tracking-wider uppercase hover:bg-neutral-800 transition">
+      <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" title="View résumé" onclick="openResumeModal(); return false;"
+         class="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-full bg-black text-white text-[11px] font-bold tracking-wider uppercase hover:bg-neutral-800 transition cursor-pointer">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14 2v6h6M9 13h6M9 17h4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         <span>Résumé</span>
       </a>
@@ -637,7 +637,7 @@
           <a onclick="toggleMobileMenu()" href="#projects" class="py-2 border-b border-neutral-100 hover:text-neutral-500">PRODUCT</a>
           <a onclick="toggleMobileMenu()" href="#landing-pages" class="py-2 border-b border-neutral-100 hover:text-neutral-500">INNOVATION</a>
           <a onclick="toggleMobileMenu()" href="#services" class="py-2 border-b border-neutral-100 hover:text-neutral-500">EXPERTISE</a>
-          <a onclick="toggleMobileMenu()" href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" class="py-2 border-b border-neutral-100 hover:text-neutral-500">RÉSUMÉ</a>
+          <a onclick="toggleMobileMenu(); openResumeModal(); return false;" href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" class="py-2 border-b border-neutral-100 hover:text-neutral-500">RÉSUMÉ</a>
           <a onclick="toggleMobileMenu(); openContactModal();" href="javascript:void(0)" class="py-2 text-black hover:underline">CONTACT</a>
         </nav>
       </div>
@@ -1175,7 +1175,7 @@
         <a class="px-6 py-2.5 rounded-full border border-neutral-700 hover:border-neutral-400 text-xs font-medium tracking-wider uppercase transition text-neutral-300 hover:text-white" href="https://www.google.com/maps/place/Gurugram,+Haryana" target="_blank" rel="noopener">
           GURUGRAM, INDIA
         </a>
-        <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-neutral-700 hover:border-neutral-400 text-xs font-medium tracking-wider uppercase transition text-neutral-300 hover:text-white">
+        <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" onclick="openResumeModal(); return false;" class="inline-flex items-center gap-2 px-6 py-2.5 rounded-full border border-neutral-700 hover:border-neutral-400 text-xs font-medium tracking-wider uppercase transition text-neutral-300 hover:text-white cursor-pointer">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14 2v6h6M9 13h6M9 17h4" stroke-linecap="round" stroke-linejoin="round"></path></svg>
           VIEW RÉSUMÉ
         </a>
@@ -1199,6 +1199,31 @@
     </div>
   </footer>
   <!-- END: Contact / Let's Talk Footer -->
+
+  <!-- MODAL: Résumé Viewer (in-page, no navigation away) -->
+  <div id="resume-modal" onclick="if(event.target === this) closeResumeModal()" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-[#0D0D0D] border border-white/10 rounded-2xl w-full max-w-4xl h-[90vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 shrink-0">
+        <div class="flex flex-col">
+          <span class="text-[10px] font-bold tracking-widest uppercase text-neutral-500">Résumé</span>
+          <span class="text-sm font-bold tracking-wide uppercase text-white">Suchi Bansal</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/20 text-[11px] font-semibold tracking-wider uppercase text-neutral-300 hover:text-white hover:border-white/40 transition">
+            Open in new tab
+          </a>
+          <a href="assets/Suchi-Bansal-Resume.pdf" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-black text-[11px] font-bold tracking-wider uppercase hover:bg-neutral-200 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Download
+          </a>
+          <button onclick="closeResumeModal()" aria-label="Close résumé" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white/40 transition">✕</button>
+        </div>
+      </div>
+      <div class="flex-1 bg-neutral-800 min-h-0">
+        <iframe id="resume-frame" title="Suchi Bansal — Résumé" class="w-full h-full" src="about:blank"></iframe>
+      </div>
+    </div>
+  </div>
 
   <!-- MODAL: Project Detail Modal -->
   <div id="project-modal" onclick="if(event.target === this) closeProjectModal()" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none flex items-center justify-center p-4">
@@ -1515,11 +1540,33 @@
       card.classList.add('scale-95');
     }
 
+    // Résumé viewer — opens the PDF in an in-page modal (no navigation away).
+    function openResumeModal() {
+      const modal = document.getElementById('resume-modal');
+      const frame = document.getElementById('resume-frame');
+      // Lazy-load the PDF only when opened; #view hint hides the viewer's own toolbar clutter where supported.
+      if (frame.getAttribute('src') === 'about:blank') {
+        frame.src = 'assets/Suchi-Bansal-Resume.pdf#view=FitH';
+      }
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeResumeModal() {
+      const modal = document.getElementById('resume-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = '';
+    }
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const modal = document.getElementById('project-modal');
         if (modal && !modal.classList.contains('pointer-events-none')) {
           closeProjectModal();
+        }
+        const rmodal = document.getElementById('resume-modal');
+        if (rmodal && !rmodal.classList.contains('pointer-events-none')) {
+          closeResumeModal();
         }
       }
     });
