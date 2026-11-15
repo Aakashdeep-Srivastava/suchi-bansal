@@ -10,5 +10,8 @@
   },
   "dependencies": {
     "@fiddle-digital/string-tune": "^1.2.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.5"
   }
 }
