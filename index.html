@@ -260,6 +260,34 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="FlexCarousel.css">
   <style>
+    /* ============================================================
+       SCROLL-DRIVEN HEADLINE: white light fills letters from the
+       center outward to both ends (--fill 0 → 1, set from JS).
+       ============================================================ */
+    .light-fill-text {
+      --fill: 0;              /* 0 = dim base, 1 = fully white */
+      --dim: rgba(255, 255, 255, 0.26);
+      color: transparent;
+      background-image: linear-gradient(
+        90deg,
+        var(--dim) 0%,
+        var(--dim) calc(50% - 50% * var(--fill) - 1.5%),
+        #ffffff   calc(50% - 50% * var(--fill)),
+        #ffffff   calc(50% + 50% * var(--fill)),
+        var(--dim) calc(50% + 50% * var(--fill) + 1.5%),
+        var(--dim) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 calc(18px * var(--fill)) rgba(255, 255, 255, calc(0.4 * var(--fill)));
+      transition: text-shadow 0.1s linear;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      /* No scroll shimmer — show the finished white headline immediately. */
+      .light-fill-text { --fill: 1; }
+    }
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #FAFAFA;
@@ -703,7 +731,7 @@
               <!-- Crisp Base Image (GPU accelerated) -->
               <img
                 id="sem-media-img"
-                src="assets/about_media.jpg?v=16"
+                src="assets/about_media.jpg?v=17"
                 alt="Suchi Bansal — Product Leadership &amp; AI Craft"
                 class="w-full h-full object-cover rounded-xl transition-none"
                 style="transform: scale(1.02) translateZ(0); transform-origin: center; backface-visibility: hidden;"
@@ -711,7 +739,7 @@
               <!-- Pre-blurred Layer for 120 FPS GPU-accelerated Unblur (fades out opacity smoothly on scroll) -->
               <img
                 id="sem-media-blur"
-                src="assets/about_media.jpg?v=16"
+                src="assets/about_media.jpg?v=17"
                 alt=""
                 aria-hidden="true"
                 class="absolute inset-0 w-full h-full object-cover rounded-xl transition-none pointer-events-none"
@@ -720,20 +748,19 @@
               <!-- Subtle Gradient Overlay: protects top/bottom legibility while keeping the center 100% transparent -->
               <div id="sem-media-overlay" class="absolute inset-0 bg-gradient-to-b from-black/75 via-transparent to-black/85 rounded-xl transition-opacity duration-150 pointer-events-none"></div>
 
+              <!-- Scroll-animated headline: centered at the top; white light fills the letters from the middle outward to both ends as you scroll -->
+              <div id="sem-headline" class="absolute top-[5%] left-1/2 -translate-x-1/2 z-30 w-[90%] max-w-[46rem] text-center pointer-events-none select-none opacity-0" style="will-change: opacity, transform;">
+                <h3 class="light-fill-text text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold uppercase leading-snug" style="letter-spacing: 0.18em;">
+                  Turning customer insights into AI-powered products used by millions
+                </h3>
+              </div>
+
               <!-- Minimal Aesthetic About Info - Perimeter Layout with Empty Center -->
               <div
                 id="sem-media-content"
                 class="absolute inset-0 z-20 flex flex-col justify-between p-5 sm:p-7 md:p-9 pointer-events-none opacity-0 transition-all duration-300 select-none"
               >
-                <!-- Top Perimeter: Refined Monochrome Headline -->
-                <div class="flex flex-col sm:flex-row sm:items-baseline justify-between gap-2 border-b border-white/10 pb-3">
-                  <h3 class="text-xs sm:text-sm md:text-base font-extrabold uppercase tracking-tight text-white max-w-xl">
-                    TURNING CUSTOMER INSIGHT INTO AI-POWERED PRODUCTS USED BY MILLIONS
-                  </h3>
-                  <span class="text-[10px] font-mono tracking-wider uppercase text-neutral-400 shrink-0">
-                    BASED IN GURUGRAM &bull; INDIA
-                  </span>
-                </div>
+                <!-- Headline moved to #sem-headline (top-center, scroll-animated); "Gurugram, India" now lives on the globe in the artwork. -->
 
                 <!-- Center Zone: COMPLETELY OPEN & EMPTY - 100% unobscured view of artwork -->
                 <div class="flex-1 pointer-events-none min-h-[140px] md:min-h-[200px]"></div>

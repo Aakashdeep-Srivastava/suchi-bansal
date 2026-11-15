@@ -13,6 +13,7 @@ export function initScrollExpandMedia() {
   const dateTag = document.getElementById('sem-date');
   const scrollPrompt = document.getElementById('sem-scroll-prompt');
   const mediaContent = document.getElementById('sem-media-content');
+  const headline = document.getElementById('sem-headline');
 
   const ASPECT_RATIO = 1024 / 546; // ≈ 1.875457875
 
@@ -88,6 +89,16 @@ export function initScrollExpandMedia() {
     if (scrollPrompt) {
       scrollPrompt.style.transform = `translateX(${textTranslateX}vw)`;
       scrollPrompt.style.opacity = subOpacity;
+    }
+
+    // Scroll-driven headline: fades in as the card opens, then a band of white
+    // light fills the letters from the middle outward to both ends (--fill 0→1).
+    if (headline) {
+      const hOpacity = Math.min(1, Math.max(0, (progress - 0.40) / 0.22));
+      headline.style.opacity = hOpacity.toFixed(3);
+      headline.style.transform = `translate(-50%, ${((1 - hOpacity) * 10).toFixed(1)}px) translateZ(0)`;
+      const fill = Math.min(1, Math.max(0, (progress - 0.42) / 0.56));
+      headline.style.setProperty('--fill', fill.toFixed(3));
     }
 
     // Content reveals smoothly as media finishes expanding
