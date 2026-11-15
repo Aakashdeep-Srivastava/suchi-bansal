@@ -285,9 +285,27 @@
       text-shadow: 0 0 calc(18px * var(--fill, 0)) rgba(255, 255, 255, calc(0.4 * var(--fill, 0)));
       transition: text-shadow 0.1s linear;
     }
+    /* Left-to-right variant: white light sweeps from the left edge to the right
+       (used by the below-card summary). Same --fill (0→1), set by scroll JS. */
+    .light-fill-ltr {
+      --dim: rgba(255, 255, 255, 0.26);
+      color: transparent;
+      background-image: linear-gradient(
+        90deg,
+        #ffffff 0%,
+        #ffffff calc(100% * var(--fill, 0)),
+        var(--dim) calc(100% * var(--fill, 0) + 3%),
+        var(--dim) 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 calc(14px * var(--fill, 0)) rgba(255, 255, 255, calc(0.3 * var(--fill, 0)));
+      transition: text-shadow 0.1s linear;
+    }
     @media (prefers-reduced-motion: reduce) {
-      /* No scroll shimmer — show the finished white headline immediately. */
-      #sem-headline { --fill: 1 !important; }
+      /* No scroll shimmer — show the finished white text immediately. */
+      #sem-headline, #sem-subcopy { --fill: 1 !important; }
     }
 
     body {
@@ -757,41 +775,10 @@
                 </h3>
               </div>
 
-              <!-- Minimal Aesthetic About Info - Perimeter Layout with Empty Center -->
-              <div
-                id="sem-media-content"
-                class="absolute inset-0 z-20 flex flex-col justify-between p-5 sm:p-7 md:p-9 pointer-events-none opacity-0 transition-all duration-300 select-none"
-              >
-                <!-- Headline moved to #sem-headline (top-center, scroll-animated); "Gurugram, India" now lives on the globe in the artwork. -->
-
-                <!-- Center Zone: COMPLETELY OPEN & EMPTY - 100% unobscured view of artwork -->
-                <div class="flex-1 pointer-events-none min-h-[140px] md:min-h-[200px]"></div>
-
-                <!-- Bottom Perimeter: Disciplines, About Summary & Monochrome CTAs -->
-                <div class="pt-3 border-t border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-                  <!-- Disciplines (summary paragraph moved below the card — see #sem-subcopy) -->
-                  <div class="max-w-xl space-y-2">
-                    <div class="flex items-center gap-2.5">
-                      <span class="text-[10px] font-bold tracking-widest uppercase text-neutral-300">DISCIPLINE &amp; CRAFT</span>
-                      <div class="h-px bg-white/15 w-6"></div>
-                      <span class="text-[10px] font-mono tracking-widest uppercase text-neutral-400">PRODUCT STRATEGY &bull; AI/ML &bull; GTM &bull; SAAS</span>
-                    </div>
-                  </div>
-
-                  <!-- Monochrome Action Buttons -->
-                  <div class="flex items-center gap-3 shrink-0 pt-1 md:pt-0">
-                    <a href="javascript:void(0)" onclick="openContactModal()" class="pointer-events-auto px-5 py-2.5 rounded-full bg-white text-black hover:bg-neutral-200 text-xs font-bold tracking-wider uppercase transition-all duration-200 inline-flex items-center gap-2">
-                      <span>GET IN TOUCH</span>
-                      <svg class="w-3.5 h-3.5 text-black" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round"></path>
-                      </svg>
-                    </a>
-                    <a href="#services" class="pointer-events-auto px-5 py-2.5 rounded-full border border-neutral-500 hover:border-white text-white text-xs font-bold tracking-wider uppercase transition-all duration-200">
-                      SERVICES
-                    </a>
-                  </div>
-                </div>
-              </div>
+              <!-- Card content overlay removed by design: the headline (#sem-headline) sits
+                   at the top of the artwork and the summary (#sem-subcopy) sits just below
+                   the card. Discipline tags + GET IN TOUCH / SERVICES CTAs were removed from
+                   the card (CTAs now live in the footer). -->
             </div>
 
             <!-- Card Subtitles (Translate Outward) -->
@@ -807,7 +794,7 @@
 
           <!-- About summary — sits in the clear band directly BELOW the card; JS parks it just under the card's bottom edge and reveals it on scroll -->
           <p id="sem-subcopy"
-             class="light-fill-text absolute top-1/2 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-3xl text-center text-[11px] sm:text-xs md:text-sm font-medium leading-relaxed tracking-wider uppercase pointer-events-none select-none opacity-0"
+             class="light-fill-ltr absolute top-1/2 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-4xl text-left text-[11px] sm:text-xs md:text-sm font-medium leading-relaxed tracking-wide uppercase pointer-events-none select-none opacity-0 py-3"
              style="will-change: opacity, transform;">
             I define product vision, strategy, and roadmaps for AI-powered consumer and enterprise products — translating customer insight and market intelligence into scalable, revenue-driving outcomes.
           </p>
@@ -1177,7 +1164,13 @@
       <!-- Bottom Credits Bar -->
       <div class="w-full pt-8 border-t border-neutral-900 flex flex-col md:flex-row items-center justify-between text-[10px] tracking-widest uppercase text-neutral-600 font-semibold gap-4">
         <div>SUCHI BANSAL. ALL RIGHTS RESERVED</div>
-        <div>SUCHI BANSAL • SENIOR PRODUCT MANAGER</div>
+        <div>SUCHI BANSAL &bull; SENIOR PRODUCT MANAGER</div>
+        <!-- CTAs moved off the About card into this footer corner -->
+        <div class="flex items-center gap-3">
+          <a href="javascript:void(0)" onclick="openContactModal()" class="hover:text-white transition">GET IN TOUCH</a>
+          <span class="text-neutral-800">/</span>
+          <a href="#services" class="hover:text-white transition">SERVICES</a>
+        </div>
       </div>
 
     </div>
