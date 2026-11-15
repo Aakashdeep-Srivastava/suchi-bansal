@@ -64,4 +64,4 @@ Allow: /
 User-agent: CCBot
 Allow: /
 
-Sitemap: https://suchibansal.vercel.app/sitemap.xml
+Sitemap: https://www.suchibansal.com/sitemap.xml

@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://suchibansal.vercel.app/</loc>
+    <loc>https://www.suchibansal.com/</loc>
     <lastmod>2026-11-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://suchibansal.vercel.app/assets/hero_portrait.png</image:loc>
+      <image:loc>https://www.suchibansal.com/assets/hero_portrait.png</image:loc>
       <image:title>Suchi Bansal — Senior Product Manager</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://suchibansal.vercel.app/assets/about_media.jpg</image:loc>
+      <image:loc>https://www.suchibansal.com/assets/about_media.jpg</image:loc>
       <image:title>Suchi Bansal — Product Strategy, AI, and Growth</image:title>
     </image:image>
   </url>

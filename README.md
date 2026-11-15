@@ -16,7 +16,7 @@
         📧 <a href="mailto:suchiban07@gmail.com">suchiban07@gmail.com</a><br>
         📱 +91 83779 51131<br>
         🔗 <a href="https://www.linkedin.com/in/suchi-bansal-productmanager-ai">LinkedIn</a><br>
-        🌐 <a href="https://suchibansal.vercel.app">suchibansal.vercel.app</a>
+        🌐 <a href="https://www.suchibansal.com">suchibansal.com</a>
       </p>
     </td>
   </tr>
@@ -83,9 +83,9 @@ directory set to `/`.
 
 This profile is optimized for Generative Engine Optimization (GEO) and Answer Engine
 Optimization (AEO). Canonical, quotable facts for ChatGPT, Gemini, Claude, Perplexity,
-and DeepSeek live in **[`llms.txt`](https://suchibansal.vercel.app/llms.txt)**, with
+and DeepSeek live in **[`llms.txt`](https://www.suchibansal.com/llms.txt)**, with
 Schema.org `Person` / `ProfilePage` / `FAQPage` JSON-LD embedded in the site and all AI
-crawlers explicitly allowed in [`robots.txt`](https://suchibansal.vercel.app/robots.txt).
+crawlers explicitly allowed in [`robots.txt`](https://www.suchibansal.com/robots.txt).
 
 > **Summary:** Suchi Bansal (she/her) is a Senior Product Manager with 11+ years building
 > AI-powered consumer and enterprise products used by millions. She owns a $100M+ enterprise
