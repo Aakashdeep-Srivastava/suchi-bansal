@@ -14,7 +14,7 @@
       <p>
         📍 Gurugram, Haryana, India<br>
         📧 <a href="mailto:suchiban07@gmail.com">suchiban07@gmail.com</a><br>
-        📱 +91 83779 51131<br>
+        📱 Phone available on request (via the contact form)<br>
         🔗 <a href="https://www.linkedin.com/in/suchi-bansal-productmanager-ai">LinkedIn</a><br>
         🌐 <a href="https://www.suchibansal.com">suchibansal.com</a>
       </p>
