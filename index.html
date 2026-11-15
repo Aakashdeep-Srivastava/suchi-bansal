@@ -1499,10 +1499,23 @@
 
     function submitContactForm(e) {
       e.preventDefault();
-      const name = document.getElementById('contact-name').value;
+      const name = document.getElementById('contact-name').value.trim();
+      const email = document.getElementById('contact-email').value.trim();
       const service = document.getElementById('contact-service').value;
+      const message = document.getElementById('contact-message').value.trim();
+
+      // Compose an email to Suchi with the form details (opens the visitor's mail app)
+      const subject = `Inquiry: ${service} — ${name}`;
+      const body =
+        `Name: ${name}\n` +
+        `Email: ${email}\n` +
+        `Topic: ${service}\n\n` +
+        `${message}`;
+      const mailto = `mailto:suchiban07@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      window.location.href = mailto;
+
       closeContactModal();
-      showToast(`Thank you, ${name}! Your inquiry for "${service}" has been received.`);
+      showToast(`Thanks, ${name}! Opening your email app to send to Suchi…`);
       document.getElementById('contact-form').reset();
     }
 
