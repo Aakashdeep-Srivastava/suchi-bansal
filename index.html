@@ -769,16 +769,13 @@
 
                 <!-- Bottom Perimeter: Disciplines, About Summary & Monochrome CTAs -->
                 <div class="pt-3 border-t border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-                  <!-- About Me Summary & Disciplines -->
+                  <!-- Disciplines (summary paragraph moved below the card — see #sem-subcopy) -->
                   <div class="max-w-xl space-y-2">
                     <div class="flex items-center gap-2.5">
                       <span class="text-[10px] font-bold tracking-widest uppercase text-neutral-300">DISCIPLINE &amp; CRAFT</span>
                       <div class="h-px bg-white/15 w-6"></div>
                       <span class="text-[10px] font-mono tracking-widest uppercase text-neutral-400">PRODUCT STRATEGY &bull; AI/ML &bull; GTM &bull; SAAS</span>
                     </div>
-                    <p class="text-xs sm:text-[12px] font-medium leading-relaxed tracking-wider uppercase text-neutral-300">
-                      I DEFINE PRODUCT VISION, STRATEGY, AND ROADMAPS FOR AI-POWERED CONSUMER AND ENTERPRISE PRODUCTS — TRANSLATING CUSTOMER INSIGHT AND MARKET INTELLIGENCE INTO SCALABLE, REVENUE-DRIVING OUTCOMES.
-                    </p>
                   </div>
 
                   <!-- Monochrome Action Buttons -->
@@ -807,6 +804,13 @@
               </p>
             </div>
           </div>
+
+          <!-- About summary — sits in the clear band directly BELOW the card; JS parks it just under the card's bottom edge and reveals it on scroll -->
+          <p id="sem-subcopy"
+             class="light-fill-text absolute top-1/2 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-3xl text-center text-[11px] sm:text-xs md:text-sm font-medium leading-relaxed tracking-wider uppercase pointer-events-none select-none opacity-0"
+             style="will-change: opacity, transform;">
+            I define product vision, strategy, and roadmaps for AI-powered consumer and enterprise products — translating customer insight and market intelligence into scalable, revenue-driving outcomes.
+          </p>
 
           <!-- Splitting Title Header (ABOUT translates left, ME translates right) -->
           <div class="flex items-center justify-center text-center gap-2 sm:gap-4 w-full relative z-10 pointer-events-none flex-col" style="will-change: transform; backface-visibility: hidden;">

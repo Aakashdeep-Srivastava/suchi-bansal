@@ -14,6 +14,7 @@ export function initScrollExpandMedia() {
   const scrollPrompt = document.getElementById('sem-scroll-prompt');
   const mediaContent = document.getElementById('sem-media-content');
   const headline = document.getElementById('sem-headline');
+  const subcopy = document.getElementById('sem-subcopy');
 
   const ASPECT_RATIO = 1024 / 546; // ≈ 1.875457875
 
@@ -32,7 +33,7 @@ export function initScrollExpandMedia() {
 
     // Fully expanded size matching the image aspect ratio (1024 / 546)
     const maxWByViewport = window.innerWidth * 0.94;
-    const maxWByHeight = (window.innerHeight * 0.86) * ASPECT_RATIO;
+    const maxWByHeight = (window.innerHeight * 0.80) * ASPECT_RATIO;
     const endW = Math.min(maxWByViewport, maxWByHeight);
     const endH = endW / ASPECT_RATIO;
 
@@ -97,8 +98,21 @@ export function initScrollExpandMedia() {
       const hOpacity = Math.min(1, Math.max(0, (progress - 0.40) / 0.22));
       headline.style.opacity = hOpacity.toFixed(3);
       headline.style.transform = `translate(-50%, ${((1 - hOpacity) * 10).toFixed(1)}px) translateZ(0)`;
-      const fill = Math.min(1, Math.max(0, (progress - 0.42) / 0.56));
+      const fill = Math.min(1, Math.max(0, (progress - 0.42) / 0.40));
       headline.style.setProperty('--fill', fill.toFixed(3));
+    }
+
+    // About summary parked just below the card's bottom edge (follows the card as
+    // it grows), fading in near full expansion so it reads as a line under the image.
+    if (subcopy) {
+      const gap = isMobile ? 16 : 26;
+      const belowY = (currentH / 2 + gap).toFixed(1);
+      const subFade = Math.min(1, Math.max(0, (progress - 0.80) / 0.12));
+      subcopy.style.opacity = subFade.toFixed(3);
+      subcopy.style.transform = `translate(-50%, ${belowY}px) translateZ(0)`;
+      // Same center-out light reveal as the headline, staggered just after it.
+      const subFill = Math.min(1, Math.max(0, (progress - 0.82) / 0.18));
+      subcopy.style.setProperty('--fill', subFill.toFixed(3));
     }
 
     // Content reveals smoothly as media finishes expanding
