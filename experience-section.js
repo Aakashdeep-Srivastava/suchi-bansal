@@ -136,11 +136,11 @@ export async function initExperienceSection() {
     // 5. Update HUD Phase Title
     if (hudPhase) {
       if (currentProgress < 0.30) {
-        hudPhase.textContent = "ORIGIN & FOUNDATIONS";
+        hudPhase.textContent = "FOUNDATION & JOURNEY";
       } else if (currentProgress < 0.65) {
-        hudPhase.textContent = "SELF-DIRECTED LEARNING";
+        hudPhase.textContent = "SAMSUNG RESEARCH INSTITUTE";
       } else {
-        hudPhase.textContent = "FREELANCE / INDEPENDENT";
+        hudPhase.textContent = "CANON INDIA — REVENUE & GROWTH";
       }
     }
 

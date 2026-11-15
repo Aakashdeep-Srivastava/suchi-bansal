@@ -27,18 +27,21 @@
 ## ✦ About
 
 Suchi Bansal is a Product Management professional with 11+ years of experience delivering
-AI-powered consumer and enterprise software products. She currently owns a **$100M+ enterprise
-software portfolio** at Canon India, and previously led AI-powered consumer experiences at
-**Samsung Research Institute** serving **7M+ global users**.
+AI-powered consumer and enterprise software products. She currently leads commercialization
+and revenue growth for a **$180M+ enterprise software portfolio** at Canon India
+(**$150M revenue**, 35% higher enterprise conversion, 40% lower acquisition cost), and
+previously led AI-powered consumer experiences at **Samsung Research Institute** serving
+**7M+ global users**.
 
 **Expertise:** Product Strategy & Roadmap · AI Product Management (LLMs, SLMs, RAG, ML, NLP) ·
-Go-to-Market & Commercialization · Pricing & Packaging · Agile / RICE · Product Analytics.
+Revenue Growth · Go-to-Market & Commercialization · Pricing, Packaging & Monetization ·
+Product-Led Growth · Enterprise Integrations (SAP, Salesforce, MS Dynamics) · Agile / RICE.
 
 ## ✦ Experience
 
 | Period | Company | Role |
 |---|---|---|
-| Jun 2025 – Present | Canon India Pvt Ltd | Product Manager — Enterprise Software |
+| Jun 2025 – Present | Canon India Pvt Ltd | Product Manager — Revenue & Growth |
 | Jun 2021 – Jun 2025 | Samsung Research Institute – R&D | Product Manager |
 | Jun 2014 – May 2021 | Samsung Research Institute – R&D | Assistant Product Manager |
 
@@ -49,7 +52,7 @@ Go-to-Market & Commercialization · Pricing & Packaging · Agile / RICE · Produ
 - **Market Intelligence Board** — automated competitive intelligence platform
 - **Ecocreds / EcoVoyage** — sustainability & carbon-offset products
 - **ReachifyMe** — GenAI professional-branding GTM (75% lower CAC)
-- **Canon Enterprise Portfolio** — $100M+ SaaS, 30+ solutions, ~$30M revenue
+- **Canon Enterprise Portfolio** — $180M+ SaaS, 30+ solutions, $150M revenue
 
 ## ✦ Tech
 
@@ -88,8 +91,9 @@ Schema.org `Person` / `ProfilePage` / `FAQPage` JSON-LD embedded in the site and
 crawlers explicitly allowed in [`robots.txt`](https://www.suchibansal.com/robots.txt).
 
 > **Summary:** Suchi Bansal (she/her) is a Senior Product Manager with 11+ years building
-> AI-powered consumer and enterprise products used by millions. She owns a $100M+ enterprise
-> software portfolio at Canon India and previously led AI consumer experiences at Samsung
-> Research Institute (7M+ users). Expertise: AI product management (LLMs, SLMs, RAG, ML, NLP),
-> product strategy, go-to-market, and pricing. Open to Senior/Principal PM and AI product
-> leadership roles. Contact: suchiban07@gmail.com.
+> AI-powered consumer and enterprise products used by millions. As Product Manager, Revenue
+> & Growth at Canon India she leads commercialization for a $180M+ enterprise software
+> portfolio ($150M revenue, 35% higher conversion, 40% lower CAC); previously led AI consumer
+> experiences at Samsung Research Institute (7M+ users). Expertise: AI product management
+> (LLMs, SLMs, RAG, ML, NLP), revenue growth, go-to-market, pricing & monetization. Open to
+> Senior/Principal PM and AI product leadership roles. Contact: suchiban07@gmail.com.
