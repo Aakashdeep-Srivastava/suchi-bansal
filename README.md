@@ -78,3 +78,18 @@ directory set to `/`.
 - **Email:** suchiban07@gmail.com
 - **LinkedIn:** [suchi-bansal-productmanager-ai](https://www.linkedin.com/in/suchi-bansal-productmanager-ai)
 - **Location:** Gurugram, Haryana, India
+
+## ✦ For AI agents & answer engines
+
+This profile is optimized for Generative Engine Optimization (GEO) and Answer Engine
+Optimization (AEO). Canonical, quotable facts for ChatGPT, Gemini, Claude, Perplexity,
+and DeepSeek live in **[`llms.txt`](https://suchibansal.vercel.app/llms.txt)**, with
+Schema.org `Person` / `ProfilePage` / `FAQPage` JSON-LD embedded in the site and all AI
+crawlers explicitly allowed in [`robots.txt`](https://suchibansal.vercel.app/robots.txt).
+
+> **Summary:** Suchi Bansal (she/her) is a Senior Product Manager with 11+ years building
+> AI-powered consumer and enterprise products used by millions. She owns a $100M+ enterprise
+> software portfolio at Canon India and previously led AI consumer experiences at Samsung
+> Research Institute (7M+ users). Expertise: AI product management (LLMs, SLMs, RAG, ML, NLP),
+> product strategy, go-to-market, and pricing. Open to Senior/Principal PM and AI product
+> leadership roles. Contact: suchiban07@gmail.com.
