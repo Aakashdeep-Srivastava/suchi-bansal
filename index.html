@@ -1219,8 +1219,17 @@
           <button onclick="closeResumeModal()" aria-label="Close résumé" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white/40 transition">✕</button>
         </div>
       </div>
-      <div class="flex-1 bg-neutral-800 min-h-0">
-        <iframe id="resume-frame" title="Suchi Bansal — Résumé" class="w-full h-full" src="about:blank"></iframe>
+      <div class="flex-1 bg-neutral-700 min-h-0">
+        <object id="resume-object" type="application/pdf" data="assets/Suchi-Bansal-Resume.pdf#view=FitH" class="w-full h-full" aria-label="Suchi Bansal — Résumé">
+          <!-- Fallback shown when the browser can't preview a PDF inline (common on mobile) -->
+          <div class="w-full h-full flex flex-col items-center justify-center gap-4 text-center p-8 bg-[#0D0D0D]">
+            <p class="text-neutral-300 text-sm max-w-xs">Preview isn’t supported in this browser. Open or download the résumé instead.</p>
+            <div class="flex gap-3">
+              <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-full bg-white text-black text-xs font-bold tracking-wider uppercase hover:bg-neutral-200 transition">Open résumé</a>
+              <a href="assets/Suchi-Bansal-Resume.pdf" download class="px-5 py-2.5 rounded-full border border-white/30 text-white text-xs font-bold tracking-wider uppercase hover:border-white/60 transition">Download</a>
+            </div>
+          </div>
+        </object>
       </div>
     </div>
   </div>
@@ -1543,11 +1552,6 @@
     // Résumé viewer — opens the PDF in an in-page modal (no navigation away).
     function openResumeModal() {
       const modal = document.getElementById('resume-modal');
-      const frame = document.getElementById('resume-frame');
-      // Lazy-load the PDF only when opened; #view hint hides the viewer's own toolbar clutter where supported.
-      if (frame.getAttribute('src') === 'about:blank') {
-        frame.src = 'assets/Suchi-Bansal-Resume.pdf#view=FitH';
-      }
       modal.classList.remove('opacity-0', 'pointer-events-none');
       document.body.style.overflow = 'hidden';
     }
