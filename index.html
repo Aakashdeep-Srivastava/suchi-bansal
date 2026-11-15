@@ -264,28 +264,30 @@
        SCROLL-DRIVEN HEADLINE: white light fills letters from the
        center outward to both ends (--fill 0 → 1, set from JS).
        ============================================================ */
+    /* --fill (0→1) is inherited from #sem-headline, set by scroll JS.
+       We deliberately do NOT declare --fill here, or it would shadow the
+       inherited value; var(--fill, 0) supplies the pre-JS default. */
     .light-fill-text {
-      --fill: 0;              /* 0 = dim base, 1 = fully white */
       --dim: rgba(255, 255, 255, 0.26);
       color: transparent;
       background-image: linear-gradient(
         90deg,
         var(--dim) 0%,
-        var(--dim) calc(50% - 50% * var(--fill) - 1.5%),
-        #ffffff   calc(50% - 50% * var(--fill)),
-        #ffffff   calc(50% + 50% * var(--fill)),
-        var(--dim) calc(50% + 50% * var(--fill) + 1.5%),
+        var(--dim) calc(50% - 50% * var(--fill, 0) - 1.5%),
+        #ffffff   calc(50% - 50% * var(--fill, 0)),
+        #ffffff   calc(50% + 50% * var(--fill, 0)),
+        var(--dim) calc(50% + 50% * var(--fill, 0) + 1.5%),
         var(--dim) 100%
       );
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 calc(18px * var(--fill)) rgba(255, 255, 255, calc(0.4 * var(--fill)));
+      text-shadow: 0 0 calc(18px * var(--fill, 0)) rgba(255, 255, 255, calc(0.4 * var(--fill, 0)));
       transition: text-shadow 0.1s linear;
     }
     @media (prefers-reduced-motion: reduce) {
       /* No scroll shimmer — show the finished white headline immediately. */
-      .light-fill-text { --fill: 1; }
+      #sem-headline { --fill: 1 !important; }
     }
 
     body {
@@ -750,7 +752,7 @@
 
               <!-- Scroll-animated headline: centered at the top; white light fills the letters from the middle outward to both ends as you scroll -->
               <div id="sem-headline" class="absolute top-[5%] left-1/2 -translate-x-1/2 z-30 w-[90%] max-w-[46rem] text-center pointer-events-none select-none opacity-0" style="will-change: opacity, transform;">
-                <h3 class="light-fill-text text-[9px] sm:text-xs md:text-sm lg:text-base font-semibold uppercase leading-snug" style="letter-spacing: 0.18em;">
+                <h3 class="light-fill-text text-[9px] sm:text-xs md:text-sm lg:text-base font-medium uppercase leading-snug" style="letter-spacing: 0.15em;">
                   Turning customer insights into AI-powered products used by millions
                 </h3>
               </div>
