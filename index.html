@@ -1463,8 +1463,8 @@
         html += `
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-black mb-2 text-center">Product Screens</h4>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              ${data.images.map(im => `<a href="${im}" target="_blank" rel="noopener" class="block rounded-xl overflow-hidden border border-neutral-200 bg-neutral-50"><img src="${im}" alt="${title} screen" loading="lazy" class="w-full h-full object-cover" /></a>`).join('')}
+            <div class="grid gap-3 ${data.images.length === 1 ? 'grid-cols-1 max-w-lg mx-auto' : (data.images.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1 sm:grid-cols-3')}">
+              ${data.images.map(im => `<a href="${im}" target="_blank" rel="noopener" class="block rounded-xl overflow-hidden border border-neutral-200 bg-neutral-50"><img src="${im}" alt="${title} screen" loading="lazy" class="w-full h-auto object-contain" /></a>`).join('')}
             </div>
           </div>
         `;

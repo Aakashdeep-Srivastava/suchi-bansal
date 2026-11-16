@@ -38,7 +38,7 @@ export const DEFAULT_ITEMS = [
     alt: 'S Bike Mode — Samsung Galaxy J Series hands-free riding mode',
     title: 'S Bike Mode',
     subtitle: 'Hands-Free Rider Safety — Galaxy J Series',
-    description: 'A hands-free safety mode for Samsung Galaxy J Series that minimizes distraction while riding — intelligently managing calls and alerts so riders stay focused on the road. I owned problem definition, research, design, and launch for S Bike Mode.',
+    description: 'The only dedicated phone safety feature for two-wheeler riders in India — a hands-free mode that intelligently manages calls and alerts so riders stay focused on the road. Part of Samsung’s “Make for India” innovations, it reached ~50% adoption among Galaxy J Series users. I owned problem definition, research, design, and launch.',
     video: 'assets/s-bike-mode.mp4',
     images: [
       'Project Images/s-bike-shot-1.jpg',
@@ -95,6 +95,18 @@ export const DEFAULT_ITEMS = [
       'Created brand differentiation and stickiness, improving user retention and platform loyalty.'
     ],
     tools: ['Product Roadmapping', 'API Integration', 'User Research', 'Compliance', 'GTM Strategy', 'Samsung Health'],
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
+    linkLabel: 'Connect on LinkedIn ↗'
+  },
+  {
+    src: 'Project Images/Ultra Data Saving.jpg',
+    alt: 'Ultra Data Saving Mode — Samsung Galaxy J Series',
+    title: 'Ultra Data Saving Mode',
+    subtitle: 'Make for India — Data Savings (Opera Max)',
+    description: 'A feature that reduces mobile data usage by limiting background data for apps — apps don’t use data unless actively in use, helping users save their data plan. A flagship “Make for India” innovation delivering meaningful savings across video streaming, chat, shopping, music, and news.',
+    video: 'assets/ultra-data-saving.mp4',
+    images: [ 'Project Images/uds-shot-1.jpg' ],
+    tools: ['Product Requirements', 'Backlog Prioritization', 'Agile Delivery', 'Analytics'],
     link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
     linkLabel: 'Connect on LinkedIn ↗'
   },
