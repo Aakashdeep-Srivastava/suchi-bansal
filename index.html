@@ -1219,17 +1219,10 @@
           <button onclick="closeResumeModal()" aria-label="Close résumé" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white/40 transition">✕</button>
         </div>
       </div>
-      <div class="flex-1 bg-neutral-700 min-h-0">
-        <object id="resume-object" type="application/pdf" data="assets/Suchi-Bansal-Resume.pdf#view=FitH" class="w-full h-full" aria-label="Suchi Bansal — Résumé">
-          <!-- Fallback shown when the browser can't preview a PDF inline (common on mobile) -->
-          <div class="w-full h-full flex flex-col items-center justify-center gap-4 text-center p-8 bg-[#0D0D0D]">
-            <p class="text-neutral-300 text-sm max-w-xs">Preview isn’t supported in this browser. Open or download the résumé instead.</p>
-            <div class="flex gap-3">
-              <a href="assets/Suchi-Bansal-Resume.pdf" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-full bg-white text-black text-xs font-bold tracking-wider uppercase hover:bg-neutral-200 transition">Open résumé</a>
-              <a href="assets/Suchi-Bansal-Resume.pdf" download class="px-5 py-2.5 rounded-full border border-white/30 text-white text-xs font-bold tracking-wider uppercase hover:border-white/60 transition">Download</a>
-            </div>
-          </div>
-        </object>
+      <!-- Résumé pages as images: renders reliably in-page on every device (desktop + mobile) -->
+      <div id="resume-pages" class="flex-1 min-h-0 overflow-y-auto bg-neutral-700 flex flex-col items-center gap-3 p-3 sm:p-4">
+        <img data-src="assets/resume-page-1.png?v=1" alt="Suchi Bansal résumé — page 1" class="w-full max-w-3xl block rounded shadow-lg bg-white">
+        <img data-src="assets/resume-page-2.png?v=1" alt="Suchi Bansal résumé — page 2" class="w-full max-w-3xl block rounded shadow-lg bg-white">
       </div>
     </div>
   </div>
@@ -1552,6 +1545,11 @@
     // Résumé viewer — opens the PDF in an in-page modal (no navigation away).
     function openResumeModal() {
       const modal = document.getElementById('resume-modal');
+      // Lazy-load the page images on first open (keeps them off the initial page load)
+      document.querySelectorAll('#resume-pages img[data-src]').forEach(img => {
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+      });
       modal.classList.remove('opacity-0', 'pointer-events-none');
       document.body.style.overflow = 'hidden';
     }
