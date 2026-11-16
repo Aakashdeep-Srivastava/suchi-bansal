@@ -307,6 +307,29 @@
       #sem-headline, #sem-subcopy { --fill: 1 !important; }
     }
 
+    /* Reading-narration highlight: project description illuminates left-to-right,
+       synced to the ElevenLabs voice (--read = audio progress 0..1, set by JS).
+       Idle default is 1 (fully dark/readable). */
+    .read-highlight {
+      --read: 1;
+      background-image: linear-gradient(
+        90deg,
+        #0f172a 0%,
+        #0f172a calc(100% * var(--read, 1)),
+        #1596D4 calc(100% * var(--read, 1)),
+        #cbd5e1 calc(100% * var(--read, 1) + 1.6%),
+        #cbd5e1 100%
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+    .narrate-btn .icon-pause { display: none; }
+    .narrate-btn.is-playing .icon-pause { display: block; }
+    .narrate-btn.is-playing .icon-play { display: none; }
+    .narrate-btn.is-playing { background: #1596D4; color: #fff; border-color: #1596D4; }
+
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #FAFAFA;
@@ -1470,7 +1493,16 @@
         `;
       }
       if (data.description) {
-        html += `<p class="text-neutral-600 leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${data.description}</p>`;
+        const narrateBtn = data.narration ? `
+          <button type="button" class="narrate-btn absolute top-0 right-0 w-8 h-8 rounded-full border border-neutral-200 bg-white flex items-center justify-center text-[#1596D4] hover:bg-sky-50 shadow-sm transition" data-audio="${data.narration}" title="Listen in Suchi's voice" aria-label="Listen in Suchi's voice">
+            <svg class="icon-play w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <svg class="icon-pause w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+          </button>` : '';
+        html += `
+          <div class="relative ${data.narration ? 'px-10' : ''}">
+            ${narrateBtn}
+            <p class="read-highlight leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${data.description}</p>
+          </div>`;
       }
       if (data.images && data.images.length) {
         html += `
@@ -1558,6 +1590,7 @@
       }
 
       document.getElementById('modal-project-body').innerHTML = html;
+      setupNarration();
 
       const modal = document.getElementById('project-modal');
       const card = document.getElementById('project-modal-card');
@@ -1573,7 +1606,54 @@
     }
     window.openProjectModal = openProjectModal;
 
+    // ---- Project narration (ElevenLabs "Suchi" voice) + left-to-right reading highlight ----
+    let _narrAudio = null, _narrRAF = null, _narrText = null, _narrBtn = null;
+    function stopNarration() {
+      if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
+      if (_narrAudio) { _narrAudio.pause(); try { _narrAudio.currentTime = 0; } catch (e) {} }
+      if (_narrText) _narrText.style.setProperty('--read', '1');
+      if (_narrBtn) _narrBtn.classList.remove('is-playing');
+      _narrText = null; _narrBtn = null;
+    }
+    function setupNarration() {
+      const btn = document.querySelector('#modal-project-body .narrate-btn');
+      if (!btn) return;
+      const text = document.querySelector('#modal-project-body .read-highlight');
+      btn.addEventListener('click', () => {
+        const src = btn.getAttribute('data-audio');
+        if (_narrAudio && _narrBtn === btn && !_narrAudio.paused) {   // pause
+          _narrAudio.pause();
+          if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
+          btn.classList.remove('is-playing');
+          return;
+        }
+        if (!_narrAudio) _narrAudio = new Audio();
+        if (!_narrAudio.src || _narrAudio.src.indexOf(src) === -1) {  // new clip
+          _narrAudio.src = src;
+          try { _narrAudio.currentTime = 0; } catch (e) {}
+          text.style.setProperty('--read', '0');
+        }
+        _narrText = text; _narrBtn = btn;
+        _narrAudio.onended = () => {
+          text.style.setProperty('--read', '1');
+          btn.classList.remove('is-playing');
+          if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
+        };
+        const tick = () => {
+          if (_narrAudio.duration) {
+            text.style.setProperty('--read', Math.min(1, _narrAudio.currentTime / _narrAudio.duration).toFixed(4));
+          }
+          if (!_narrAudio.paused) _narrRAF = requestAnimationFrame(tick);
+        };
+        _narrAudio.play().then(() => {
+          btn.classList.add('is-playing');
+          _narrRAF = requestAnimationFrame(tick);
+        }).catch(() => {});
+      });
+    }
+
     function closeProjectModal() {
+      stopNarration();
       const modal = document.getElementById('project-modal');
       const card = document.getElementById('project-modal-card');
       if (!modal || !card) return;

@@ -9,6 +9,7 @@ export const DEFAULT_ITEMS = [
     title: 'Sleep Coach',
     subtitle: 'AI Sleep Coaching — Samsung Health',
     description: 'With the Samsung Health app and the Sleep tile on Galaxy Watch, users can view their sleep time, record snoring, and follow AI-driven sleep coaching. I owned discovery, strategy, and launch for Sleep Coach — a personalized, AI-powered system that turns raw sleep tracking into actionable guidance.',
+    narration: 'assets/narration/sleep-coach.mp3',
     video: 'assets/sleep-coach.mp4',
     images: [
       'Project Images/sleep-coach-shot-3.jpg',
