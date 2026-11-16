@@ -316,18 +316,19 @@
       transition: color 0.45s ease, -webkit-text-fill-color 0.45s ease, text-shadow 0.45s ease;
     }
     .read-word.lit { color: #0f172a; -webkit-text-fill-color: #0f172a; } /* read (dark, legible) */
-    .read-word.reading {                     /* the word currently being read */
-      color: #1596D4;
-      -webkit-text-fill-color: #1596D4;
-      text-shadow: 0 0 10px rgba(21, 150, 212, 0.35);
+    .read-word.reading {                     /* the word currently being read — black, slightly bold */
+      color: #000;
+      -webkit-text-fill-color: #000;
+      font-weight: 600;
     }
+    .read-word.rw-strong { font-weight: 700; }   /* emphasised words (e.g. scope titles) */
     @media (prefers-reduced-motion: reduce) {
       .read-word { color: #0f172a; -webkit-text-fill-color: #0f172a; transition: none; }
     }
     .narrate-btn .icon-pause { display: none; }
     .narrate-btn.is-playing .icon-pause { display: block; }
     .narrate-btn.is-playing .icon-play { display: none; }
-    .narrate-btn.is-playing { background: #1596D4; color: #fff; border-color: #1596D4; }
+    .narrate-btn.is-playing { background: #111; color: #fff; border-color: #111; }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
@@ -1477,6 +1478,10 @@
       document.getElementById('modal-project-category').innerText = category;
       document.getElementById('modal-project-title').innerText = title;
       
+      // Wrap each word in a .read-word span (optionally bold) for the reading reveal.
+      const rw = (text, strong) => String(text).split(/\s+/)
+        .map(w => `<span class="read-word${strong ? ' rw-strong' : ''}">${w}</span>`).join(' ');
+
       let html = '';
       if (data.video) {
         html += `
@@ -1493,15 +1498,14 @@
       }
       if (data.description) {
         const narrateBtn = data.narration ? `
-          <button type="button" class="narrate-btn absolute top-0 right-0 w-8 h-8 rounded-full border border-neutral-200 bg-white flex items-center justify-center text-[#1596D4] hover:bg-sky-50 shadow-sm transition" data-audio="${data.narration}" title="Listen in Suchi's voice" aria-label="Listen in Suchi's voice">
+          <button type="button" class="narrate-btn absolute top-0 right-0 w-8 h-8 rounded-full border border-neutral-300 bg-white flex items-center justify-center text-neutral-900 hover:bg-neutral-100 shadow-sm transition" data-audio="${data.narration}" title="Listen in Suchi's voice" aria-label="Listen in Suchi's voice">
             <svg class="icon-play w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <svg class="icon-pause w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
           </button>` : '';
-        const readWords = data.description.split(/\s+/).map(w => `<span class="read-word">${w}</span>`).join(' ');
         html += `
           <div class="relative ${data.narration ? 'px-10' : ''}">
             ${narrateBtn}
-            <p class="read-copy leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${readWords}</p>
+            <p class="read-copy read-block leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${rw(data.description)}</p>
           </div>`;
       }
       if (data.images && data.images.length) {
@@ -1536,7 +1540,7 @@
           <div>
             <h4 class="text-xs font-bold uppercase tracking-wider text-black mb-2 text-center">Scope of Work</h4>
             <div class="space-y-2 max-w-xl mx-auto text-left">
-              ${data.scope.map(s => `<p class="text-xs text-neutral-600 leading-relaxed"><span class="font-bold text-neutral-900">${s.title}</span> — ${s.detail}</p>`).join('')}
+              ${data.scope.map(s => `<p class="read-block text-xs leading-relaxed">${rw(s.title, true)} <span class="read-word">—</span> ${rw(s.detail)}</p>`).join('')}
             </div>
           </div>
         `;
@@ -1553,8 +1557,8 @@
         html += `
           <div class="bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
             <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-2 text-center">Key Highlights</p>
-            <ul class="list-disc pl-5 space-y-1 text-xs text-neutral-700 max-w-xl mx-auto">
-              ${data.highlights.map(h => `<li>${h}</li>`).join('')}
+            <ul class="list-disc pl-5 space-y-1.5 text-xs max-w-xl mx-auto marker:text-neutral-400">
+              ${data.highlights.map(h => `<li class="read-block">${rw(h)}</li>`).join('')}
             </ul>
           </div>
         `;
@@ -1606,75 +1610,81 @@
     }
     window.openProjectModal = openProjectModal;
 
-    // ---- Project description: word-by-word reading reveal + ElevenLabs "Suchi" voice ----
-    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _readTimer = null, _words = null, _io = null;
+    // ---- Reading reveal for every .read-block (description, scope, highlights) + ElevenLabs voice on the description ----
+    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _ios = [];
+    const _reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function _clearReadTimers() {
-      if (_readTimer) { clearTimeout(_readTimer); _readTimer = null; }
-      if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
+    function _revealBlock(block) {
+      const words = block.__words || Array.from(block.querySelectorAll('.read-word'));
+      block.__words = words;
+      if (!words.length) return;
+      if (_reduceMotion) { words.forEach(w => w.classList.add('lit')); return; }
+      let i = 0;
+      const step = () => {
+        for (let k = 0; k < words.length; k++) {
+          words[k].classList.toggle('lit', k <= i);
+          words[k].classList.toggle('reading', k === i);
+        }
+        i++;
+        if (i < words.length) {
+          const len = (words[i - 1].textContent || '').length;
+          block.__timer = setTimeout(step, Math.min(230, 80 + len * 20));
+        } else {
+          words.forEach(w => w.classList.remove('reading'));
+        }
+      };
+      step();
     }
-    function _setLit(n) {
-      if (!_words) return;
-      for (let i = 0; i < _words.length; i++) {
-        _words[i].classList.toggle('lit', i < n);
-        _words[i].classList.toggle('reading', i === n - 1 && n < _words.length);
-      }
-    }
+    function _stopBlock(block) { if (block && block.__timer) { clearTimeout(block.__timer); block.__timer = null; } }
+
     function stopNarration() {
-      _clearReadTimers();
-      if (_io) { _io.disconnect(); _io = null; }
+      _ios.forEach(io => io.disconnect()); _ios = [];
+      document.querySelectorAll('#modal-project-body .read-block').forEach(_stopBlock);
+      if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
       if (_narrAudio) { _narrAudio.pause(); try { _narrAudio.currentTime = 0; } catch (e) {} }
       if (_narrBtn) _narrBtn.classList.remove('is-playing');
-      _narrBtn = null; _words = null;
+      _narrBtn = null;
     }
     function setupNarration() {
-      const p = document.querySelector('#modal-project-body .read-copy');
-      if (!p) return;
-      _words = Array.from(p.querySelectorAll('.read-word'));
-      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const root = document.getElementById('project-modal-card') || null;
+      // Every readable block illuminates word-by-word when it scrolls into view
+      document.querySelectorAll('#modal-project-body .read-block').forEach((block) => {
+        if (!block.querySelector('.read-word')) return;
+        if ('IntersectionObserver' in window) {
+          const io = new IntersectionObserver((entries) => {
+            entries.forEach((e) => { if (e.isIntersecting) { io.disconnect(); _revealBlock(block); } });
+          }, { root, threshold: 0.3 });
+          io.observe(block); _ios.push(io);
+        } else { _revealBlock(block); }
+      });
 
-      // Auto reading reveal when the description scrolls into view (reading pace)
-      function autoRead() {
-        _clearReadTimers();
-        if (reduce) { _setLit(_words.length); return; }
-        let i = 0;
-        const step = () => {
-          _setLit(i + 1); i++;
-          if (i < _words.length) {
-            const len = (_words[i - 1].textContent || '').length;
-            _readTimer = setTimeout(step, Math.min(230, 80 + len * 20));
-          }
-        };
-        step();
-      }
-      if ('IntersectionObserver' in window) {
-        const scrollRoot = document.getElementById('project-modal-card');
-        _io = new IntersectionObserver((entries) => {
-          entries.forEach((e) => { if (e.isIntersecting) { _io.disconnect(); _io = null; autoRead(); } });
-        }, { root: scrollRoot || null, threshold: 0.3 });
-        _io.observe(p);
-      } else { autoRead(); }
-
-      // Voice button: play ElevenLabs narration and drive the reveal from audio progress
+      // Voice button drives the DESCRIPTION block (.read-copy), synced to the audio
       const btn = document.querySelector('#modal-project-body .narrate-btn');
       if (!btn) return;
+      const copy = document.querySelector('#modal-project-body .read-copy');
+      const copyWords = copy ? Array.from(copy.querySelectorAll('.read-word')) : [];
+      const setCopyLit = (n) => {
+        for (let k = 0; k < copyWords.length; k++) {
+          copyWords[k].classList.toggle('lit', k < n);
+          copyWords[k].classList.toggle('reading', k === n - 1 && n < copyWords.length);
+        }
+      };
       btn.addEventListener('click', () => {
         const src = btn.getAttribute('data-audio');
         if (_narrAudio && !_narrAudio.paused && _narrBtn === btn) { // pause
-          _narrAudio.pause(); _clearReadTimers(); btn.classList.remove('is-playing'); return;
+          _narrAudio.pause(); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } btn.classList.remove('is-playing'); return;
         }
-        _clearReadTimers();                    // stop the auto reveal; audio takes over
-        if (_io) { _io.disconnect(); _io = null; }
+        _stopBlock(copy); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } // audio takes over the description
         if (!_narrAudio) _narrAudio = new Audio();
         if (!_narrAudio.src || _narrAudio.src.indexOf(src) === -1) { _narrAudio.src = src; try { _narrAudio.currentTime = 0; } catch (e) {} }
         _narrBtn = btn;
-        _narrAudio.onended = () => { _setLit(_words.length); btn.classList.remove('is-playing'); _clearReadTimers(); };
+        _narrAudio.onended = () => { setCopyLit(copyWords.length); copyWords.forEach(w => w.classList.remove('reading')); btn.classList.remove('is-playing'); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } };
         const tick = () => {
-          if (_narrAudio.duration) _setLit(Math.round((_narrAudio.currentTime / _narrAudio.duration) * _words.length));
+          if (_narrAudio.duration) setCopyLit(Math.round((_narrAudio.currentTime / _narrAudio.duration) * copyWords.length));
           if (!_narrAudio.paused) _narrRAF = requestAnimationFrame(tick);
         };
         _narrAudio.play().then(() => { btn.classList.add('is-playing'); _narrRAF = requestAnimationFrame(tick); })
-          .catch(() => { _setLit(_words.length); btn.classList.remove('is-playing'); });
+          .catch(() => { setCopyLit(copyWords.length); btn.classList.remove('is-playing'); });
       });
     }
 
