@@ -66,6 +66,39 @@ export const DEFAULT_ITEMS = [
     linkLabel: 'Connect on LinkedIn ↗'
   },
   {
+    src: 'Project Images/Medication Tracking.jpg',
+    alt: 'Medication Tracking — Samsung Health × Tata 1mg',
+    title: 'Medication Tracking',
+    subtitle: 'Samsung Health × Tata 1mg Integration',
+    description: 'A medication-tracking experience inside Samsung Health, built through a strategic integration with Tata 1mg — helping users schedule, track, and stay on top of their medications. I owned the vision, roadmap, partnership, and launch.',
+    video: 'assets/medication-tracking.mp4',
+    flow: [
+      'Project Images/med-flow-1.jpg',
+      'Project Images/med-flow-2.jpg',
+      'Project Images/med-flow-3.jpg',
+      'Project Images/med-flow-4.jpg',
+      'Project Images/med-flow-5.jpg'
+    ],
+    scope: [
+      { title: 'Strategic Product Roadmapping', detail: 'Defined the vision and roadmap for medication tracking within Samsung Health.' },
+      { title: 'Cross-Functional Collaboration', detail: 'Led engagement with Tata 1mg, coordinating engineering, UX, legal, and compliance teams to integrate the feature seamlessly.' },
+      { title: 'API & Platform Integration', detail: 'Worked on API contracts ensuring smooth, secure, and compliant data flow between Samsung Health and Tata 1mg.' },
+      { title: 'User-Centric Feature Design', detail: 'Conducted user research and usability testing to ensure an intuitive medication-tracking experience.' },
+      { title: 'Regulatory & Compliance', detail: 'Ensured adherence to healthcare regulations and data-privacy norms for handling medication information.' },
+      { title: 'Go-to-Market Strategy & Adoption', detail: 'Led feature launch planning — marketing coordination, user education, and onboarding strategies.' }
+    ],
+    highlights: [
+      'Enhanced user engagement — increased daily active users by 12% and session duration by 20% within Samsung Health through higher medication-tracking touchpoints.',
+      'Strengthened Samsung Health’s positioning as a holistic health platform by integrating a critical healthcare feature.',
+      'Established a scalable partnership model with Tata 1mg, opening avenues for future healthcare integrations.',
+      'Gained behavioral insights on user health habits, informing future AI-driven health recommendations.',
+      'Created brand differentiation and stickiness, improving user retention and platform loyalty.'
+    ],
+    tools: ['Product Roadmapping', 'API Integration', 'User Research', 'Compliance', 'GTM Strategy', 'Samsung Health'],
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
+    linkLabel: 'Connect on LinkedIn ↗'
+  },
+  {
     src: 'Project Images/Photographer Portfolio.png',
     alt: 'Ecocreds',
     title: 'Ecocreds',

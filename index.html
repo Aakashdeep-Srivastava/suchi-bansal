@@ -1469,6 +1469,23 @@
           </div>
         `;
       }
+      if (data.flow && data.flow.length) {
+        html += `
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-black mb-2 text-center">User Flow</h4>
+            <div class="overflow-x-auto no-scrollbar -mx-2 px-2 pb-1">
+              <div class="flex items-center gap-2 w-max mx-auto">
+                ${data.flow.map((im, idx) => `
+                  <a href="${im}" target="_blank" rel="noopener" class="shrink-0 block rounded-xl overflow-hidden border border-neutral-200 bg-neutral-50">
+                    <img src="${im}" alt="${title} flow step ${idx + 1}" loading="lazy" class="h-56 w-auto object-contain bg-neutral-50" />
+                  </a>
+                  ${idx < data.flow.length - 1 ? `<div class="shrink-0 text-neutral-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>` : ''}
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }
       if (data.scope && data.scope.length) {
         html += `
           <div>
