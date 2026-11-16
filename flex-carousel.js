@@ -40,6 +40,10 @@ export const DEFAULT_ITEMS = [
     subtitle: 'Hands-Free Rider Safety — Galaxy J Series',
     description: 'A hands-free safety mode for Samsung Galaxy J Series that minimizes distraction while riding — intelligently managing calls and alerts so riders stay focused on the road. I owned problem definition, research, design, and launch for S Bike Mode.',
     video: 'assets/s-bike-mode.mp4',
+    images: [
+      'Project Images/s-bike-shot-1.jpg',
+      'Project Images/s-bike-shot-2.jpg'
+    ],
     scope: [
       { title: 'Conceptualization & Problem Identification', detail: 'Identified the safety challenges faced by bike riders and defined a problem statement to address distracted riding.' },
       { title: 'User Research & Market Insights', detail: 'Conducted in-depth research on rider behavior, accident patterns, and existing safety solutions to validate the need for S Bike Mode.' },
