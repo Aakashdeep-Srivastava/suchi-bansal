@@ -1631,7 +1631,6 @@
         if (!_narrAudio.src || _narrAudio.src.indexOf(src) === -1) {  // new clip
           _narrAudio.src = src;
           try { _narrAudio.currentTime = 0; } catch (e) {}
-          text.style.setProperty('--read', '0');
         }
         _narrText = text; _narrBtn = btn;
         _narrAudio.onended = () => {
@@ -1648,7 +1647,10 @@
         _narrAudio.play().then(() => {
           btn.classList.add('is-playing');
           _narrRAF = requestAnimationFrame(tick);
-        }).catch(() => {});
+        }).catch(() => {
+          text.style.setProperty('--read', '1'); // playback blocked → keep text readable
+          btn.classList.remove('is-playing');
+        });
       });
     }
 
