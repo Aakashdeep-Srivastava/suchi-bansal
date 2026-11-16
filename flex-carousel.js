@@ -107,6 +107,7 @@ export const DEFAULT_ITEMS = [
     title: 'Ultra Data Saving Mode',
     subtitle: 'Make for India — Data Savings (Opera Max)',
     description: 'A feature that reduces mobile data usage by limiting background data for apps — apps don’t use data unless actively in use, helping users save their data plan. A flagship “Make for India” innovation delivering meaningful savings across video streaming, chat, shopping, music, and news.',
+    narration: 'assets/narration/ultra-data-saving.mp3',
     video: 'assets/ultra-data-saving.mp4',
     images: [ 'Project Images/uds-shot-1.jpg' ],
     tools: ['Product Requirements', 'Backlog Prioritization', 'Agile Delivery', 'Analytics'],
