@@ -110,38 +110,6 @@ export const DEFAULT_ITEMS = [
     link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
     linkLabel: 'Connect on LinkedIn ↗'
   },
-  {
-    src: 'Project Images/Photographer Portfolio.png',
-    alt: 'Ecocreds',
-    title: 'Ecocreds',
-    subtitle: 'Sustainability Product — CESD Hackathon',
-    description: 'A sustainability platform rewarding responsible consumer behavior through carbon-credit incentives and gamification, incentivizing 1,000+ sustainable actions.',
-    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
-  },
-  {
-    src: 'Project Images/Portfolio Design.png',
-    alt: 'EcoVoyage',
-    title: 'EcoVoyage',
-    subtitle: 'Carbon Offset as a Service',
-    description: 'A scalable B2B and B2C carbon-offset platform with subscription and corporate-partnership monetization targeting ₹150+ Crore revenue within three years.',
-    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
-  },
-  {
-    src: 'Project Images/Portfolio Website.png',
-    alt: 'ReachifyMe',
-    title: 'ReachifyMe',
-    subtitle: 'GenAI GTM Strategy',
-    description: 'Complete US go-to-market strategy for an AI-powered professional branding platform — acquisition, pricing, and positioning that cut customer acquisition cost by 75%.',
-    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
-  },
-  {
-    src: 'Project Images/Sen Cruzo-Client Portfolio.png',
-    alt: 'Canon Enterprise Software Portfolio',
-    title: 'Canon Enterprise Portfolio',
-    subtitle: '$100M+ Enterprise SaaS',
-    description: 'Strategy and lifecycle for a $100M+ enterprise software portfolio across workflow automation, print management, and cybersecurity — 30+ solutions and ~$30M revenue.',
-    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
-  }
 ];
 
 export const BEND_PRESETS = {
