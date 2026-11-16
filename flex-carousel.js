@@ -34,12 +34,32 @@ export const DEFAULT_ITEMS = [
     linkLabel: 'Connect on LinkedIn ↗'
   },
   {
-    src: 'Project Images/Design Studio.png',
-    alt: 'Make for India',
-    title: 'Make for India',
-    subtitle: 'Ultra Data Saving & S-Bike Mode',
-    description: 'Flagship "Make for India" smartphone features driving 60% and 50% user adoption and supporting 8M+ device sales in the affordable segment.',
-    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
+    src: 'Project Images/S Bike Mode.jpg',
+    alt: 'S Bike Mode — Samsung Galaxy J Series hands-free riding mode',
+    title: 'S Bike Mode',
+    subtitle: 'Hands-Free Rider Safety — Galaxy J Series',
+    description: 'A hands-free safety mode for Samsung Galaxy J Series that minimizes distraction while riding — intelligently managing calls and alerts so riders stay focused on the road. I owned problem definition, research, design, and launch for S Bike Mode.',
+    video: 'assets/s-bike-mode.mp4',
+    scope: [
+      { title: 'Conceptualization & Problem Identification', detail: 'Identified the safety challenges faced by bike riders and defined a problem statement to address distracted riding.' },
+      { title: 'User Research & Market Insights', detail: 'Conducted in-depth research on rider behavior, accident patterns, and existing safety solutions to validate the need for S Bike Mode.' },
+      { title: 'Feature Ideation & Design Execution', detail: 'Designed an intuitive, hands-free mode that minimizes distractions and enhances road safety.' },
+      { title: 'Cross-Functional Collaboration', detail: 'Collaborated with engineering, UX, and QA teams to develop and refine the feature for a seamless user experience.' },
+      { title: 'Technology Integration', detail: 'Integrated motion detection, call management, and ride tracking into an efficient, non-intrusive solution.' },
+      { title: 'Stakeholder Management & GTM Strategy', detail: 'Partnered with marketing on positioning, awareness campaigns, and launch strategy to maximize adoption.' },
+      { title: 'Data Analytics & Continuous Improvement', detail: 'Used engagement metrics and behavioral analytics to optimize feature performance post-launch.' }
+    ],
+    highlights: [
+      'Enhanced road safety — reduced distracted riding by managing calls intelligently while riding.',
+      'Seamless hands-free experience that keeps riders focused without missing critical alerts.',
+      'High adoption among daily commuters and long-distance riders, encouraging a safety-first approach.',
+      'Competitive differentiation — strengthened Samsung’s position with an exclusive, rider-centric innovation.',
+      'Helped riders comply with hands-free laws, preventing penalties and accidents.',
+      'User feedback: “Great for long rides — lets me enjoy the journey without unnecessary interruptions.” · “Ensures I don’t miss emergency calls while keeping me safe on the road.”'
+    ],
+    tools: ['Product Discovery', 'User Research', 'Figma', 'Motion Detection', 'Analytics', 'GTM Strategy'],
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
+    linkLabel: 'Connect on LinkedIn ↗'
   },
   {
     src: 'Project Images/Photographer Portfolio.png',
