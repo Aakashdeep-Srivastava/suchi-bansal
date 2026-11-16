@@ -311,16 +311,18 @@
        at a natural reading pace when the description scrolls into view — and syncs to
        the ElevenLabs voice when the Listen button is used. */
     .read-word {
-      color: #cbd5e1;                 /* unread (light grey) */
-      transition: color 0.45s ease, text-shadow 0.45s ease;
+      color: #cbd5e1;                        /* unread (light grey) */
+      -webkit-text-fill-color: #cbd5e1;      /* override inherited text-fill so color changes show */
+      transition: color 0.45s ease, -webkit-text-fill-color 0.45s ease, text-shadow 0.45s ease;
     }
-    .read-word.lit { color: #0f172a; } /* read (dark, legible) */
-    .read-word.reading {               /* the word currently being read */
+    .read-word.lit { color: #0f172a; -webkit-text-fill-color: #0f172a; } /* read (dark, legible) */
+    .read-word.reading {                     /* the word currently being read */
       color: #1596D4;
+      -webkit-text-fill-color: #1596D4;
       text-shadow: 0 0 10px rgba(21, 150, 212, 0.35);
     }
     @media (prefers-reduced-motion: reduce) {
-      .read-word { color: #0f172a; transition: none; }
+      .read-word { color: #0f172a; -webkit-text-fill-color: #0f172a; transition: none; }
     }
     .narrate-btn .icon-pause { display: none; }
     .narrate-btn.is-playing .icon-pause { display: block; }
@@ -1646,9 +1648,10 @@
         step();
       }
       if ('IntersectionObserver' in window) {
+        const scrollRoot = document.getElementById('project-modal-card');
         _io = new IntersectionObserver((entries) => {
           entries.forEach((e) => { if (e.isIntersecting) { _io.disconnect(); _io = null; autoRead(); } });
-        }, { threshold: 0.35 });
+        }, { root: scrollRoot || null, threshold: 0.3 });
         _io.observe(p);
       } else { autoRead(); }
 
