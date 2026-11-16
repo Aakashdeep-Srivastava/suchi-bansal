@@ -4,12 +4,34 @@ export const photo = (id) => `https://images.unsplash.com/${id}?w=1200&q=80&auto
 
 export const DEFAULT_ITEMS = [
   {
-    src: 'Project Images/Cafe Website.png',
-    alt: 'Samsung Digital Health',
-    title: 'Samsung Digital Health',
-    subtitle: 'AI Health Features for 7M+ Users',
-    description: 'Medication Tracking, Snore Detection, and Sleep Coach — AI-powered wellness features reaching 25% adoption within six months across Samsung mobile and wearables.',
-    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai'
+    src: 'Project Images/Sleep Coach.jpg',
+    alt: 'Sleep Coach — Samsung Health sleep coaching on Galaxy Watch',
+    title: 'Sleep Coach',
+    subtitle: 'AI Sleep Coaching — Samsung Health',
+    description: 'With the Samsung Health app and the Sleep tile on Galaxy Watch, users can view their sleep time, record snoring, and follow AI-driven sleep coaching. I owned discovery, strategy, and launch for Sleep Coach — a personalized, AI-powered system that turns raw sleep tracking into actionable guidance.',
+    video: 'assets/sleep-coach.mp4',
+    images: [
+      'Project Images/sleep-coach-shot-3.jpg',
+      'Project Images/sleep-coach-shot-1.jpg',
+      'Project Images/sleep-coach-shot-2.jpg'
+    ],
+    scope: [
+      { title: 'Problem Discovery & Market Research', detail: 'Identified gaps in existing sleep-tracking solutions and the need for personalized coaching; benchmarked against Fitbit, Apple Health, and other wellness platforms.' },
+      { title: 'Product Strategy & Vision', detail: 'Defined the Sleep Coach roadmap aligned to Samsung Health’s health & wellness objectives, advocating AI-driven personalized recommendations as a market differentiator.' },
+      { title: 'User-Centric Feature Development', detail: 'Partnered with UX and engineering to build an intuitive, data-driven coaching system with seamless Samsung wearable integration for real-time tracking.' },
+      { title: 'Cross-Functional Collaboration', detail: 'Worked with data scientists on an AI-based sleep-categorization model and with clinical experts and sleep researchers to validate sleep-scoring methodologies.' },
+      { title: 'GTM & User Adoption', detail: 'Built onboarding flows and in-app tutorials to improve discoverability; defined engagement KPIs such as sleep-score improvement and feature retention.' },
+      { title: 'Post-Launch Optimization & Growth', detail: 'Led A/B testing of sleep-guidance effectiveness, improving adoption and retention.' }
+    ],
+    highlights: [
+      'Personalized sleep coaching tailored to each user’s habits, improving sleep hygiene and well-being.',
+      'Boosted daily/weekly active users engaging with sleep insights, with users consistently returning to track sleep and follow recommendations.',
+      'Measurable improvement in sleep scores, bedtime consistency, and sleep duration — fewer wake-ups and better sleep quality.',
+      'Deeper Galaxy wearable integration, strengthening Samsung Health ecosystem stickiness with a unique AI-driven coaching feature.'
+    ],
+    tools: ['Product Discovery', 'AI/ML Categorization', 'Figma', 'A/B Testing', 'Mixpanel', 'Samsung Health'],
+    link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
+    linkLabel: 'Connect on LinkedIn ↗'
   },
   {
     src: 'Project Images/Design Studio.png',

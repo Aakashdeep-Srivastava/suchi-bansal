@@ -1443,7 +1443,13 @@
       document.getElementById('modal-project-title').innerText = title;
       
       let html = '';
-      if (data.src) {
+      if (data.video) {
+        html += `
+          <div class="w-full rounded-2xl overflow-hidden border border-neutral-200/80 bg-black shadow-inner">
+            <video src="${data.video}" controls preload="metadata" playsinline ${data.src ? `poster="${data.src}"` : ''} class="w-full h-auto max-h-[58vh] bg-black"></video>
+          </div>
+        `;
+      } else if (data.src) {
         html += `
           <div class="w-full h-52 sm:h-64 rounded-2xl overflow-hidden border border-neutral-200/80 bg-neutral-100 shadow-inner">
             <img src="${data.src}" alt="${data.alt || title}" class="w-full h-full object-cover object-top" />
@@ -1453,11 +1459,41 @@
       if (data.description) {
         html += `<p class="text-neutral-600 leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${data.description}</p>`;
       }
+      if (data.images && data.images.length) {
+        html += `
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-black mb-2 text-center">Product Screens</h4>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              ${data.images.map(im => `<a href="${im}" target="_blank" rel="noopener" class="block rounded-xl overflow-hidden border border-neutral-200 bg-neutral-50"><img src="${im}" alt="${title} screen" loading="lazy" class="w-full h-full object-cover" /></a>`).join('')}
+            </div>
+          </div>
+        `;
+      }
+      if (data.scope && data.scope.length) {
+        html += `
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-black mb-2 text-center">Scope of Work</h4>
+            <div class="space-y-2 max-w-xl mx-auto text-left">
+              ${data.scope.map(s => `<p class="text-xs text-neutral-600 leading-relaxed"><span class="font-bold text-neutral-900">${s.title}</span> — ${s.detail}</p>`).join('')}
+            </div>
+          </div>
+        `;
+      }
       if (data.stats) {
         html += `
           <div class="bg-neutral-50 p-4 rounded-2xl border border-neutral-200 text-center">
             <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-1">Key Highlights</p>
             <p class="text-xs text-neutral-800 font-medium">${data.stats}</p>
+          </div>
+        `;
+      }
+      if (data.highlights && data.highlights.length) {
+        html += `
+          <div class="bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
+            <p class="text-[11px] font-bold uppercase tracking-wider text-neutral-500 mb-2 text-center">Key Highlights</p>
+            <ul class="list-disc pl-5 space-y-1 text-xs text-neutral-700 max-w-xl mx-auto">
+              ${data.highlights.map(h => `<li>${h}</li>`).join('')}
+            </ul>
           </div>
         `;
       }
@@ -1485,7 +1521,7 @@
         html += `
           <div class="pt-2 flex justify-center items-center">
             <a href="${data.link}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-black text-white text-xs font-bold uppercase tracking-wider hover:bg-neutral-800 transition-all shadow-md hover:shadow-xl hover:scale-105 active:scale-95">
-              Visit Live Website ↗
+              ${data.linkLabel || 'Visit Live Website ↗'}
             </a>
           </div>
         `;
