@@ -73,6 +73,7 @@ export const DEFAULT_ITEMS = [
     title: 'Medication Tracking',
     subtitle: 'Samsung Health × Tata 1mg Integration',
     description: 'Allows users to keep track of their prescribed or over-the-counter medication regime, with important medical information and tips, and helps track medication-adherence consistency for those on a medication journey. Built inside Samsung Health through a strategic Tata 1mg integration — I owned the vision, roadmap, partnership, and launch.',
+    narration: 'assets/narration/medication-tracking.mp3',
     video: 'assets/medication-tracking.mp4',
     flow: [
       'Project Images/med-flow-1.jpg',
