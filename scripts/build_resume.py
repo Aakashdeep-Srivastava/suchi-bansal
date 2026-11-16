@@ -1,75 +1,83 @@
-"""Generate an ATS-friendly, single-column resume PDF (selectable text, standard
-headings, no multi-column/boxes/graphics). India + global standard. A4.
-Deliberately omits phone number and date of birth (public hosted copy)."""
+"""Generate an ATS-friendly resume PDF with a light sky-blue accent:
+sky-blue name/headline, sky-blue header rule, and full-width sky-blue section
+bars. Single column, selectable text, no photos/multi-column — parses in ATS.
+Also rasterizes the pages to PNG for the in-page modal viewer.
+Omits phone number and date of birth (public hosted copy)."""
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.units import cm
-from reportlab.lib.enums import TA_LEFT
+from reportlab.lib.enums import TA_LEFT, TA_CENTER, TA_RIGHT
 from reportlab.lib.colors import HexColor
 from reportlab.platypus import (SimpleDocTemplate, Paragraph, Spacer, HRFlowable,
-                                ListFlowable, ListItem)
+                                ListFlowable, ListItem, Table, TableStyle, KeepTogether)
 from reportlab.lib.styles import ParagraphStyle
 
-INK = HexColor('#111111')
-GREY = HexColor('#444444')
-LINE = HexColor('#999999')
+INK   = HexColor('#1A1A1A')
+GREY  = HexColor('#444444')
+SKY   = HexColor('#1596D4')   # headline + rule
+BAR_BG= HexColor('#B6DDF2')   # section bar background (light sky)
+BAR_TX= HexColor('#0B3B55')   # section bar text (dark navy)
 
-styles = {
-    'name': ParagraphStyle('name', fontName='Helvetica-Bold', fontSize=19, leading=22,
-                           textColor=INK, spaceAfter=1),
-    'title': ParagraphStyle('title', fontName='Helvetica', fontSize=10.5, leading=13,
-                            textColor=GREY, spaceAfter=3),
-    'contact': ParagraphStyle('contact', fontName='Helvetica', fontSize=9, leading=12,
-                              textColor=GREY, spaceAfter=2),
-    'h': ParagraphStyle('h', fontName='Helvetica-Bold', fontSize=10.5, leading=13,
-                        textColor=INK, spaceBefore=9, spaceAfter=2,
-                        tracking=0),
-    'sub': ParagraphStyle('sub', fontName='Helvetica-Bold', fontSize=10, leading=12.5,
-                         textColor=INK, spaceBefore=5, spaceAfter=0),
-    'meta': ParagraphStyle('meta', fontName='Helvetica-Oblique', fontSize=9, leading=12,
-                          textColor=GREY, spaceAfter=2),
-    'body': ParagraphStyle('body', fontName='Helvetica', fontSize=9.3, leading=12.4,
+S = {
+ 'name':   ParagraphStyle('name', fontName='Helvetica-Bold', fontSize=22, leading=24,
+                          textColor=SKY, spaceAfter=1),
+ 'title':  ParagraphStyle('title', fontName='Helvetica-BoldOblique', fontSize=11, leading=14,
+                          textColor=GREY, spaceAfter=5),
+ 'contact':ParagraphStyle('contact', fontName='Helvetica', fontSize=9, leading=13,
+                          textColor=GREY),
+ 'bar':    ParagraphStyle('bar', fontName='Helvetica-Bold', fontSize=10.5, leading=14,
+                          textColor=BAR_TX, backColor=BAR_BG, alignment=TA_CENTER,
+                          borderPadding=(3.5, 5, 3.5, 5), spaceBefore=11, spaceAfter=6),
+ 'role':   ParagraphStyle('role', fontName='Helvetica-Bold', fontSize=10.5, leading=13,
+                          textColor=INK),
+ 'dates':  ParagraphStyle('dates', fontName='Helvetica-Bold', fontSize=9, leading=13,
+                          textColor=GREY, alignment=TA_RIGHT),
+ 'body':   ParagraphStyle('body', fontName='Helvetica', fontSize=9.3, leading=12.5,
                           textColor=INK, spaceAfter=2, alignment=TA_LEFT),
-    'bullet': ParagraphStyle('bullet', fontName='Helvetica', fontSize=9.3, leading=12.3,
-                            textColor=INK, spaceAfter=1.5, alignment=TA_LEFT),
+ 'bullet': ParagraphStyle('bullet', fontName='Helvetica', fontSize=9.3, leading=12.4,
+                          textColor=INK, spaceAfter=1.5, alignment=TA_LEFT),
 }
 
+PDF = 'assets/Suchi-Bansal-Resume.pdf'
+doc = SimpleDocTemplate(PDF, pagesize=A4, leftMargin=1.5*cm, rightMargin=1.5*cm,
+                        topMargin=1.2*cm, bottomMargin=1.1*cm,
+                        title='Suchi Bansal - Resume', author='Suchi Bansal',
+                        subject='Senior Product Manager - AI & Enterprise Products')
+
 def heading(text):
-    return [Paragraph(text.upper(), styles['h']),
-            HRFlowable(width='100%', thickness=0.6, color=LINE,
-                       spaceBefore=1, spaceAfter=4)]
+    return Paragraph(text.upper(), S['bar'])
 
 def bullets(items):
     return ListFlowable(
-        [ListItem(Paragraph(t, styles['bullet']), leftIndent=10, value='•')
-         for t in items],
-        bulletType='bullet', start='•', leftIndent=12, bulletFontName='Helvetica',
-        bulletFontSize=9.3, spaceBefore=1, spaceAfter=3)
+        [ListItem(Paragraph(t, S['bullet']), leftIndent=10, value='•') for t in items],
+        bulletType='bullet', start='•', leftIndent=13, bulletFontName='Helvetica',
+        bulletColor=SKY, bulletFontSize=9.3, spaceBefore=1, spaceAfter=3)
 
-def role(company, title, dates, location, items):
-    out = [Paragraph(f"{company} &mdash; {title}", styles['sub']),
-           Paragraph(f"{dates} | {location}", styles['meta']),
-           bullets(items)]
-    return out
+def role_row(role, company, dates):
+    left = Paragraph(f"{role} <font color='#1596D4'>&rsaquo;</font> {company}", S['role'])
+    right = Paragraph(dates, S['dates'])
+    t = Table([[left, right]], colWidths=[doc.width*0.70, doc.width*0.30])
+    t.setStyle(TableStyle([
+        ('VALIGN', (0,0), (-1,-1), 'BOTTOM'),
+        ('LEFTPADDING', (0,0), (-1,-1), 0), ('RIGHTPADDING', (0,0), (-1,-1), 0),
+        ('TOPPADDING', (0,0), (-1,-1), 4), ('BOTTOMPADDING', (0,0), (-1,-1), 1),
+    ]))
+    return t
 
-doc = SimpleDocTemplate('assets/Suchi-Bansal-Resume.pdf', pagesize=A4,
-                        leftMargin=1.6*cm, rightMargin=1.6*cm,
-                        topMargin=1.3*cm, bottomMargin=1.2*cm,
-                        title='Suchi Bansal - Resume', author='Suchi Bansal',
-                        subject='Senior Product Manager - AI & Enterprise Products')
-S = []
-
+F = []
 # Header
-S.append(Paragraph('SUCHI BANSAL', styles['name']))
-S.append(Paragraph('Senior Product Manager &mdash; AI &amp; Enterprise Products', styles['title']))
-S.append(Paragraph(
-    'Gurugram, Haryana, India &nbsp;|&nbsp; suchiban07@gmail.com &nbsp;|&nbsp; '
-    'linkedin.com/in/suchi-bansal-productmanager-ai &nbsp;|&nbsp; suchibansal.com',
-    styles['contact']))
-S.append(HRFlowable(width='100%', thickness=0.8, color=INK, spaceBefore=5, spaceAfter=2))
+F.append(Paragraph('SUCHI BANSAL', S['name']))
+F.append(Paragraph('Senior Product Manager &ndash; AI &amp; Enterprise Products', S['title']))
+F.append(Paragraph(
+    "<b>Email:</b> suchiban07@gmail.com &nbsp;&nbsp;|&nbsp;&nbsp; "
+    "<b>Location:</b> Gurugram, Haryana, India", S['contact']))
+F.append(Paragraph(
+    "<b>LinkedIn:</b> linkedin.com/in/suchi-bansal-productmanager-ai &nbsp;&nbsp;|&nbsp;&nbsp; "
+    "<b>Portfolio:</b> suchibansal.com", S['contact']))
+F.append(HRFlowable(width='100%', thickness=1.4, color=SKY, spaceBefore=6, spaceAfter=2))
 
 # Summary
-S += heading('Professional Summary')
-S.append(Paragraph(
+F.append(heading('Professional Summary'))
+F.append(Paragraph(
     'Product Management professional with 11+ years of experience delivering AI-powered '
     'consumer and enterprise software products across mobility, enterprise automation, '
     'workflow automation, cybersecurity, and SaaS ecosystems. Currently leads '
@@ -78,11 +86,11 @@ S.append(Paragraph(
     'commercialization, pricing, and lifecycle management for products serving 7M+ users and '
     'multi-million-dollar portfolios. Strong background in AI product management (LLMs, SLMs, '
     'RAG, ML, NLP) and cross-functional leadership across Engineering, UX, Sales, Marketing, '
-    'and Executive stakeholders.', styles['body']))
+    'and Executive stakeholders.', S['body']))
 
 # Core skills
-S += heading('Core Skills')
-S.append(Paragraph(
+F.append(heading('Core Skills'))
+F.append(Paragraph(
     'Product Strategy &amp; Roadmap &bull; AI Product Management (LLMs, SLMs, RAG, ML, NLP) '
     '&bull; Go-to-Market (GTM) Strategy &bull; Product Commercialization &bull; Pricing, '
     'Packaging &amp; Monetization &bull; Revenue Growth &bull; Portfolio &amp; Lifecycle '
@@ -90,15 +98,16 @@ S.append(Paragraph(
     '&bull; RICE Prioritization &bull; Product Discovery &bull; Customer Experience (CX) '
     '&bull; Market &amp; Competitive Analysis &bull; Product Analytics &bull; Data-Driven '
     'Decision Making &bull; API &amp; Enterprise Integrations (SAP, Salesforce, MS Dynamics) '
-    '&bull; Stakeholder Management &bull; Cross-functional Leadership', styles['body']))
-S.append(Paragraph(
+    '&bull; Stakeholder Management &bull; Cross-functional Leadership', S['body']))
+F.append(Paragraph(
     '<b>Tools:</b> SQL, Power BI, Tableau, Google Analytics, Mixpanel, Jira, Azure DevOps, '
-    'Aha!, Figma, Pendo, Salesforce, HubSpot', styles['body']))
+    'Aha!, Figma, Pendo, Salesforce, HubSpot', S['body']))
 
 # Experience
-S += heading('Professional Experience')
-S += role('Canon India Pvt. Ltd.', 'Product Manager, Revenue &amp; Growth',
-          'Jun 2025 &ndash; Present', 'Gurugram, India', [
+F.append(heading('Professional Experience'))
+F.append(role_row('Product Manager, Revenue &amp; Growth', 'Canon India Pvt. Ltd.',
+                  'Jun 2025 &ndash; Present'))
+F.append(bullets([
     'Own strategy and lifecycle management of a $180M+ enterprise software portfolio spanning '
     'workflow automation, document management, print management, and cybersecurity for large '
     'enterprise customers.',
@@ -113,9 +122,10 @@ S += role('Canon India Pvt. Ltd.', 'Product Manager, Revenue &amp; Growth',
     'reducing customer acquisition costs by 40% while expanding market penetration.',
     'Partnered with Sales, Marketing, Engineering, and Customer Success to strengthen sales '
     'enablement, accelerate enterprise adoption, and improve customer engagement.',
-])
-S += role('Samsung Research Institute &ndash; R&amp;D', 'Product Manager',
-          'Jun 2021 &ndash; Jun 2025', 'India', [
+]))
+F.append(role_row('Product Manager', 'Samsung Research Institute &ndash; R&amp;D',
+                  'Jun 2021 &ndash; Jun 2025'))
+F.append(bullets([
     'Led end-to-end product strategy, roadmap, and commercialization for AI-powered consumer '
     'experiences across Samsung’s mobile and wearable ecosystem, serving 7M+ global users.',
     'Spearheaded collaborations with premier academic institutions (including IITs) to '
@@ -129,23 +139,23 @@ S += role('Samsung Research Institute &ndash; R&amp;D', 'Product Manager',
     'Evaluated 2,000+ customer insights (Voice of Customer, analytics, competitive '
     'benchmarking), improving segmentation accuracy by 25%; informed portfolio strategy '
     'supporting $1B+ annual smartphone sales.',
-])
-S += role('Samsung Research Institute &ndash; R&amp;D', 'Assistant Product Manager',
-          'Jun 2014 &ndash; May 2021', 'India', [
+]))
+F.append(role_row('Assistant Product Manager', 'Samsung Research Institute &ndash; R&amp;D',
+                  'Jun 2014 &ndash; May 2021'))
+F.append(bullets([
     'Managed the complete product lifecycle for multiple smartphone software features from '
     'ideation through launch, aligned to customer needs and business objectives.',
-    'Delivered flagship “Make for India” initiatives — Ultra Data Saving (UDS) '
-    'and S-Bike Mode — achieving 60% and 50% user adoption; supported sales exceeding '
-    '8M devices.',
+    'Delivered flagship “Make for India” initiatives — Ultra Data Saving (UDS) and '
+    'S-Bike Mode — achieving 60% and 50% user adoption; supported sales exceeding 8M devices.',
     'Defined requirements, prioritized backlogs, and collaborated with engineering using '
     'Agile methodologies to deliver high-quality releases across product generations.',
     'Resolved critical product issues (device heating, stability, UI responsiveness) with '
     '24–48 hour turnaround and 85% customer satisfaction.',
-])
+]))
 
 # Projects
-S += heading('Key Projects &amp; Innovation')
-S.append(bullets([
+F.append(heading('Key Projects &amp; Innovation'))
+F.append(bullets([
     '<b>Ecocreds</b> (Sustainability Hackathon) — carbon-credit incentives and '
     'gamification; incentivized 1,000+ sustainable actions.',
     '<b>EcoVoyage</b> — Carbon Offset as a Service (B2B/B2C); monetization models '
@@ -157,8 +167,8 @@ S.append(bullets([
 ]))
 
 # Education
-S += heading('Education')
-S.append(bullets([
+F.append(heading('Education'))
+F.append(bullets([
     'Executive MBA, HR &amp; Administration (People Management) — Tata Institute of Social '
     'Sciences (TISS), Mumbai',
     'Managing Brands &amp; Marketing Communication — MICA, Ahmedabad',
@@ -167,16 +177,16 @@ S.append(bullets([
 ]))
 
 # Patents
-S += heading('Patents')
-S.append(bullets([
+F.append(heading('Patents'))
+F.append(bullets([
     'Method &amp; System for Secure Data Sharing using Blockchain Network — Patent No. '
     '201941021587',
     'Action Emojis — Patent No. 201811046219',
 ]))
 
 # Honors
-S += heading('Honors &amp; Achievements')
-S.append(bullets([
+F.append(heading('Honors &amp; Achievements'))
+F.append(bullets([
     'Spearheaded Startup Summit 2025, convening India’s leading AI, HealthTech, and '
     'DeepTech startups.',
     'Snore Detection &amp; Sleep Coach contributed to 200%+ quarter-on-quarter shipment growth '
@@ -187,8 +197,15 @@ S.append(bullets([
 ]))
 
 # Languages
-S += heading('Languages')
-S.append(Paragraph('English, Hindi, Korean', styles['body']))
+F.append(heading('Languages'))
+F.append(Paragraph('English, Hindi, Korean', S['body']))
 
-doc.build(S)
-print('built assets/Suchi-Bansal-Resume.pdf')
+doc.build(F)
+print('built', PDF)
+
+# Rasterize pages to PNG for the in-page modal viewer
+import pymupdf
+d = pymupdf.open(PDF)
+for i in range(d.page_count):
+    d[i].get_pixmap(dpi=150).save(f'assets/resume-page-{i+1}.png')
+print('rendered', d.page_count, 'page images')
