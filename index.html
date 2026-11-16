@@ -307,23 +307,20 @@
       #sem-headline, #sem-subcopy { --fill: 1 !important; }
     }
 
-    /* Reading-narration highlight: project description illuminates left-to-right,
-       synced to the ElevenLabs voice (--read = audio progress 0..1, set by JS).
-       Idle default is 1 (fully dark/readable). */
-    .read-highlight {
-      --read: 1;
-      background-image: linear-gradient(
-        90deg,
-        #0f172a 0%,
-        #0f172a calc(100% * var(--read, 1)),
-        #1596D4 calc(100% * var(--read, 1)),
-        #cbd5e1 calc(100% * var(--read, 1) + 1.6%),
-        #cbd5e1 100%
-      );
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
+    /* Reading reveal: each word illuminates in sequence (left-to-right, line by line)
+       at a natural reading pace when the description scrolls into view — and syncs to
+       the ElevenLabs voice when the Listen button is used. */
+    .read-word {
+      color: #cbd5e1;                 /* unread (light grey) */
+      transition: color 0.45s ease, text-shadow 0.45s ease;
+    }
+    .read-word.lit { color: #0f172a; } /* read (dark, legible) */
+    .read-word.reading {               /* the word currently being read */
+      color: #1596D4;
+      text-shadow: 0 0 10px rgba(21, 150, 212, 0.35);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .read-word { color: #0f172a; transition: none; }
     }
     .narrate-btn .icon-pause { display: none; }
     .narrate-btn.is-playing .icon-pause { display: block; }
@@ -1498,10 +1495,11 @@
             <svg class="icon-play w-3.5 h-3.5 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
             <svg class="icon-pause w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
           </button>` : '';
+        const readWords = data.description.split(/\s+/).map(w => `<span class="read-word">${w}</span>`).join(' ');
         html += `
           <div class="relative ${data.narration ? 'px-10' : ''}">
             ${narrateBtn}
-            <p class="read-highlight leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${data.description}</p>
+            <p class="read-copy leading-relaxed font-normal text-sm sm:text-base text-center max-w-xl mx-auto">${readWords}</p>
           </div>`;
       }
       if (data.images && data.images.length) {
@@ -1606,51 +1604,74 @@
     }
     window.openProjectModal = openProjectModal;
 
-    // ---- Project narration (ElevenLabs "Suchi" voice) + left-to-right reading highlight ----
-    let _narrAudio = null, _narrRAF = null, _narrText = null, _narrBtn = null;
-    function stopNarration() {
+    // ---- Project description: word-by-word reading reveal + ElevenLabs "Suchi" voice ----
+    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _readTimer = null, _words = null, _io = null;
+
+    function _clearReadTimers() {
+      if (_readTimer) { clearTimeout(_readTimer); _readTimer = null; }
       if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
+    }
+    function _setLit(n) {
+      if (!_words) return;
+      for (let i = 0; i < _words.length; i++) {
+        _words[i].classList.toggle('lit', i < n);
+        _words[i].classList.toggle('reading', i === n - 1 && n < _words.length);
+      }
+    }
+    function stopNarration() {
+      _clearReadTimers();
+      if (_io) { _io.disconnect(); _io = null; }
       if (_narrAudio) { _narrAudio.pause(); try { _narrAudio.currentTime = 0; } catch (e) {} }
-      if (_narrText) _narrText.style.setProperty('--read', '1');
       if (_narrBtn) _narrBtn.classList.remove('is-playing');
-      _narrText = null; _narrBtn = null;
+      _narrBtn = null; _words = null;
     }
     function setupNarration() {
+      const p = document.querySelector('#modal-project-body .read-copy');
+      if (!p) return;
+      _words = Array.from(p.querySelectorAll('.read-word'));
+      const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Auto reading reveal when the description scrolls into view (reading pace)
+      function autoRead() {
+        _clearReadTimers();
+        if (reduce) { _setLit(_words.length); return; }
+        let i = 0;
+        const step = () => {
+          _setLit(i + 1); i++;
+          if (i < _words.length) {
+            const len = (_words[i - 1].textContent || '').length;
+            _readTimer = setTimeout(step, Math.min(230, 80 + len * 20));
+          }
+        };
+        step();
+      }
+      if ('IntersectionObserver' in window) {
+        _io = new IntersectionObserver((entries) => {
+          entries.forEach((e) => { if (e.isIntersecting) { _io.disconnect(); _io = null; autoRead(); } });
+        }, { threshold: 0.35 });
+        _io.observe(p);
+      } else { autoRead(); }
+
+      // Voice button: play ElevenLabs narration and drive the reveal from audio progress
       const btn = document.querySelector('#modal-project-body .narrate-btn');
       if (!btn) return;
-      const text = document.querySelector('#modal-project-body .read-highlight');
       btn.addEventListener('click', () => {
         const src = btn.getAttribute('data-audio');
-        if (_narrAudio && _narrBtn === btn && !_narrAudio.paused) {   // pause
-          _narrAudio.pause();
-          if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
-          btn.classList.remove('is-playing');
-          return;
+        if (_narrAudio && !_narrAudio.paused && _narrBtn === btn) { // pause
+          _narrAudio.pause(); _clearReadTimers(); btn.classList.remove('is-playing'); return;
         }
+        _clearReadTimers();                    // stop the auto reveal; audio takes over
+        if (_io) { _io.disconnect(); _io = null; }
         if (!_narrAudio) _narrAudio = new Audio();
-        if (!_narrAudio.src || _narrAudio.src.indexOf(src) === -1) {  // new clip
-          _narrAudio.src = src;
-          try { _narrAudio.currentTime = 0; } catch (e) {}
-        }
-        _narrText = text; _narrBtn = btn;
-        _narrAudio.onended = () => {
-          text.style.setProperty('--read', '1');
-          btn.classList.remove('is-playing');
-          if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
-        };
+        if (!_narrAudio.src || _narrAudio.src.indexOf(src) === -1) { _narrAudio.src = src; try { _narrAudio.currentTime = 0; } catch (e) {} }
+        _narrBtn = btn;
+        _narrAudio.onended = () => { _setLit(_words.length); btn.classList.remove('is-playing'); _clearReadTimers(); };
         const tick = () => {
-          if (_narrAudio.duration) {
-            text.style.setProperty('--read', Math.min(1, _narrAudio.currentTime / _narrAudio.duration).toFixed(4));
-          }
+          if (_narrAudio.duration) _setLit(Math.round((_narrAudio.currentTime / _narrAudio.duration) * _words.length));
           if (!_narrAudio.paused) _narrRAF = requestAnimationFrame(tick);
         };
-        _narrAudio.play().then(() => {
-          btn.classList.add('is-playing');
-          _narrRAF = requestAnimationFrame(tick);
-        }).catch(() => {
-          text.style.setProperty('--read', '1'); // playback blocked → keep text readable
-          btn.classList.remove('is-playing');
-        });
+        _narrAudio.play().then(() => { btn.classList.add('is-playing'); _narrRAF = requestAnimationFrame(tick); })
+          .catch(() => { _setLit(_words.length); btn.classList.remove('is-playing'); });
       });
     }
 
