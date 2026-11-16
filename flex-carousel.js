@@ -40,6 +40,7 @@ export const DEFAULT_ITEMS = [
     title: 'S Bike Mode',
     subtitle: 'Hands-Free Rider Safety — Galaxy J Series',
     description: 'The only dedicated phone safety feature for two-wheeler riders in India — a hands-free mode that intelligently manages calls and alerts so riders stay focused on the road. Part of Samsung’s “Make for India” innovations, it reached ~50% adoption among Galaxy J Series users. I owned problem definition, research, design, and launch.',
+    narration: 'assets/narration/s-bike-mode.mp3',
     video: 'assets/s-bike-mode.mp4',
     images: [
       'Project Images/s-bike-shot-1.jpg',
