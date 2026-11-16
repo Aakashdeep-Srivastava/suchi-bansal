@@ -99,7 +99,7 @@ export const DEFAULT_ITEMS = [
     linkLabel: 'Connect on LinkedIn ↗'
   },
   {
-    src: 'Project Images/Ultra Data Saving.jpg',
+    src: 'Project Images/Ultra Data Saving.jpg?v=2',
     alt: 'Ultra Data Saving Mode — Samsung Galaxy J Series',
     title: 'Ultra Data Saving Mode',
     subtitle: 'Make for India — Data Savings (Opera Max)',
