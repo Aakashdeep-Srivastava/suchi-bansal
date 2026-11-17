@@ -20,12 +20,13 @@ const DRAG_UNITS = 420;
 const SETTLE = 140;
 const EASE = 0.12;
 
-const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
-const lerp = (a, b, t) => a + (b - a) * t;
-const rad = (deg) => (deg * Math.PI) / 180;
-const bowAt = (drumDeg, bow) => -bow * (1 - Math.cos(rad(drumDeg)));
+// Pure geometry helpers — exported so they can be unit-tested in isolation.
+export const clamp = (v, lo, hi) => Math.min(hi, Math.max(lo, v));
+export const lerp = (a, b, t) => a + (b - a) * t;
+export const rad = (deg) => (deg * Math.PI) / 180;
+export const bowAt = (drumDeg, bow) => -bow * (1 - Math.cos(rad(drumDeg)));
 
-function place(ringDeg, drumDeg, ringR, drumR, bow, m) {
+export function place(ringDeg, drumDeg, ringR, drumR, bow, m) {
   return (
     `translateX(${m * bowAt(drumDeg, bow)}px)` +
     ` rotateZ(${(1 - m) * ringDeg}deg) translateY(${-(1 - m) * ringR}px)` +
