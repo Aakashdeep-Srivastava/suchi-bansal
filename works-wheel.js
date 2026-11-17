@@ -35,71 +35,35 @@ function place(ringDeg, drumDeg, ringR, drumR, bow, m) {
 
 export const DEFAULT_WORKS = [
   {
-    title: "Product Space GenAI Hackathon",
-    subtitle: "ReachifyMe — US Market Expansion Strategy",
-    description: "A US market-expansion GTM for ReachifyMe — a multi-channel acquisition plan targeting 100+ paid users at $14/month with 65% gross margins. Growing through organic channels (Reddit, Twitter, incubators & accelerators) cut customer acquisition cost from $200 to $50.",
+    title: "ReachifyMe: Product Space GenAI Hackathon Winner",
+    subtitle: "US Market Expansion Strategy",
+    description: "A US market-expansion GTM for ReachifyMe – a multi-channel acquisition plan targeting 100+ paid users at $14/month with 65% gross margins. Growing through organic channels (Reddit, Twitter, incubators & accelerators) cut customer acquisition cost from $200 to $50.",
     image: "Landing Page Assest/reachifyme-gtm.png",
     src: "Landing Page Assest/reachifyme-gtm.png",
-    stats: "100+ paid users target • $14/mo • 65% gross margin • CAC $200 → $50",
-    tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
-    deliverables: ["Multi-Channel Acquisition Plan", "Organic Growth (Reddit, X, Accelerators)", "Unit Economics & Margins"],
     link: "https://drive.google.com/file/d/1Sfnlhc80Fi1jH4P0I6wBTrbXdB41NpC8/view",
-    linkLabel: "View the strategy ↗"
+    stats: "100+ paid users · $14/mo · 65% gross margin · CAC $200 → $50",
+    tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
+    deliverables: ["Multi-Channel Acquisition Plan", "Organic Growth (Reddit, X, Accelerators)", "Unit Economics & Margins"]
   },
   {
-    title: "Samsung Health AI",
-    subtitle: "Medication, Snore & Sleep Coach",
-    description: "AI-powered digital health features across Samsung mobile and wearables — Medication Tracking, Snore Detection, and Sleep Coach — serving 7M+ global users.",
-    image: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.25\u202fPM.png",
-    src: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.25\u202fPM.png",
-    href: "#samsung-health",
-    stats: "7M+ Users • 25% Adoption in 6 Months • 200%+ QoQ Watch Growth",
-    tools: ["LLM/RAG", "Machine Learning", "Jira", "Mixpanel"],
-    deliverables: ["Product Vision & Roadmap", "AI Feature Discovery", "Adoption & Engagement Analytics"]
+    title: "EcoVoyage: Mind the Product E-Summit '25 Winner",
+    subtitle: "Carbon Offset as a Service",
+    description: "EcoVoyage – a scalable B2B and B2C Carbon Offset as a Service platform with subscription and corporate-partnership monetization, targeting ₹150+ Crore revenue within three years. Winner at Mind the Product's E-Summit '25 (Synergy of Genesis).",
+    image: "Landing Page Assest/ecovoyage.png",
+    src: "Landing Page Assest/ecovoyage.png",
+    stats: "₹150+ Crore 3-Year Target · B2B/B2C Monetization · Carbon Offset SaaS",
+    tools: ["Product Vision", "Monetization", "Partnerships", "GTM"],
+    deliverables: ["Carbon-Offset Platform Concept", "Subscription & Partnership Models", "Go-to-Market Strategy"]
   },
   {
-    title: "Market Intelligence Board",
-    subtitle: "Automated Competitive Intelligence",
-    description: "An automated Market Intelligence Board (MIB) that streamlined competitive intelligence gathering and accelerated strategic decision-making across the India portfolio.",
-    image: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.28\u202fPM.png",
-    src: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.28\u202fPM.png",
-    href: "#market-intelligence",
-    stats: "2,000+ Insights Evaluated • 25% Better Segmentation",
-    tools: ["SQL", "Power BI", "Tableau", "Pendo"],
-    deliverables: ["Competitive Intelligence Automation", "Market Sensing Dashboards", "Data-Driven Decisioning"]
-  },
-  {
-    title: "Startup Summit 2025",
-    subtitle: "AI, HealthTech & DeepTech Innovation",
-    description: "Spearheaded Startup Summit 2025, bringing together India's leading AI, HealthTech, and DeepTech startups to foster innovation and strategic collaborations.",
-    image: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.46\u202fPM.png",
-    src: "Landing Page Assest/Screenshot 2026-10-20 at 7.45.46\u202fPM.png",
-    href: "#startup-summit",
-    stats: "Startup Summit 2025 • Academic Summit 1.0 • Strategic Partnerships",
-    tools: ["Stakeholder Management", "Partnerships", "GTM", "Innovation"],
-    deliverables: ["Summit Program Direction", "Partnership Ecosystem", "Innovation Pipeline"]
-  },
-  {
-    title: "Ecocreds",
-    subtitle: "Sustainability Product — CESD Hackathon",
-    description: "A sustainability platform rewarding responsible consumer behavior through carbon-credit incentives and gamification, incentivizing 1,000+ sustainable actions.",
-    image: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.03\u202fPM.png",
-    src: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.03\u202fPM.png",
-    href: "#ecocreds",
-    stats: "1,000+ Sustainable Actions • 15–20% Projected Footprint Cut",
-    tools: ["Product Discovery", "Figma", "RICE Framework", "Gamification"],
-    deliverables: ["Product Vision & Roadmap", "Reward Mechanics", "Go-to-Market Strategy"]
-  },
-  {
-    title: "EcoVoyage & ReachifyMe",
-    subtitle: "Carbon Offset SaaS • GenAI GTM",
-    description: "EcoVoyage — a B2B/B2C Carbon Offset as a Service platform — and ReachifyMe — a US go-to-market strategy for an AI professional-branding product that cut CAC by 75%.",
-    image: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.42\u202fPM.png",
-    src: "Landing Page Assest/Screenshot 2026-10-20 at 7.44.42\u202fPM.png",
-    href: "#ecovoyage-reachifyme",
-    stats: "₹150+ Crore 3-Yr Target • 75% Lower CAC",
-    tools: ["Pricing Strategy", "Monetization", "Personas", "Positioning"],
-    deliverables: ["Monetization Models", "GTM & Growth Experiments", "Partnership Ecosystem"]
+    title: "EcoCreds: CESD Sustainability Hackathon 2025 Winner",
+    subtitle: "Centre for Excellence in Sustainable Development",
+    description: "EcoCreds – a platform that incentivizes sustainable actions like green travel, eco-friendly hotel stays, and low-impact events through a gamified rewards system. The strategy: incentivize 100K+ sustainable actions and run carbon-credit programs across 50+ businesses in transport, hospitality, and events, contributing to a 15–20% reduction in carbon footprint.",
+    image: "Landing Page Assest/ecocreds.png",
+    src: "Landing Page Assest/ecocreds.png",
+    stats: "100K+ Sustainable Actions · 50+ Businesses · 15–20% Footprint Cut",
+    tools: ["Product Discovery", "Gamification", "Carbon Credits", "GTM"],
+    deliverables: ["Rewards & Gamification Mechanics", "Carbon-Credit Program Design", "Business Partnership Model"]
   }
 ];
 
@@ -174,11 +138,8 @@ export function initWorksWheel(container, options = {}) {
     const cardInfo = document.createElement("div");
     cardInfo.className = "pointer-events-none absolute left-3.5 bottom-3.5 right-3.5 flex items-center justify-between";
     cardInfo.innerHTML = `
-      <span class="text-[11px] font-mono tracking-wider text-white drop-shadow-sm font-semibold truncate max-w-[70%]">
+      <span class="text-[11px] font-mono tracking-wider text-white drop-shadow-sm font-semibold truncate max-w-full">
         ${item.title}
-      </span>
-      <span class="bg-white/95 text-neutral-900 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1 group-hover:scale-105 transition-transform">
-        ${action} ↗
       </span>
     `;
     face.appendChild(cardInfo);

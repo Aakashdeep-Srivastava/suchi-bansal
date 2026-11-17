@@ -2063,9 +2063,13 @@
         const wheelInstance = initWorksWheel(container, {
           items: DEFAULT_WORKS,
           label: "Works '26",
-          action: "View",
+          action: "",
           onSelect: (index, item) => {
-            if (window.openProjectModal) {
+            // Tapping the card opens it directly: a linked recognition opens its link,
+            // otherwise the project detail modal.
+            if (item.link) {
+              window.open(item.link, '_blank', 'noopener');
+            } else if (window.openProjectModal) {
               window.openProjectModal(item);
             }
           }
