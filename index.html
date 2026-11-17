@@ -1858,6 +1858,8 @@
           img.src = src;
           img.alt = `${deck.title || 'Slide'} — slide ${i + 1} of ${total}`;
           img.loading = i < 2 ? 'eager' : 'lazy';
+          img.decoding = 'async';
+          if (i === 0) img.setAttribute('fetchpriority', 'high');
           img.setAttribute('data-slide', String(i + 1));
           // .deck-slide reserves 16:9 space up-front, so lazy images never shift
           // layout (which would knock scroll-snap off the first slide).
@@ -1897,6 +1899,11 @@
 
       modal.classList.remove('opacity-0', 'pointer-events-none');
       document.body.style.overflow = 'hidden';
+      // Pause the Recognition drum's animation loop so the compositor is free
+      // to paint the slides instantly (it sits directly under this modal).
+      if (window.worksWheelInstance && window.worksWheelInstance.pause) {
+        window.worksWheelInstance.pause();
+      }
     }
     window.openDeckModal = openDeckModal;
 
@@ -1905,6 +1912,9 @@
       modal.classList.add('opacity-0', 'pointer-events-none');
       if (deckCounterObserver) { deckCounterObserver.disconnect(); deckCounterObserver = null; }
       document.body.style.overflow = '';
+      if (window.worksWheelInstance && window.worksWheelInstance.resume) {
+        window.worksWheelInstance.resume();
+      }
     }
     window.closeDeckModal = closeDeckModal;
 
@@ -2195,7 +2205,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=7';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=8';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');

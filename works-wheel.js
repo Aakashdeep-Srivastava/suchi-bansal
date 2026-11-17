@@ -408,8 +408,15 @@ export function initWorksWheel(container, options = {}) {
   }
 
   // Animation Loop (Single rAF pass writing direct DOM transforms)
+  //
+  // Lifecycle: the loop only runs when it's worth running — i.e. the drum is
+  // actually on screen, the tab is foregrounded, and nothing (like the pitch-
+  // deck modal) has paused it. An always-on rAF loop needlessly pins the
+  // compositor, which is what made a modal opened over the drum paint slowly.
   let frameId = 0;
-  let isRunning = true;
+  let isRunning = false;     // is the rAF loop currently scheduled?
+  let inView = true;         // is the drum within the viewport?
+  let externallyPaused = false; // paused by a modal / explicit caller
 
   const draw = () => {
     if (!isRunning) return;
@@ -464,17 +471,49 @@ export function initWorksWheel(container, options = {}) {
     }
   };
 
-  frameId = requestAnimationFrame(draw);
+  // Single source of truth for whether the loop should be running.
+  function syncRunState() {
+    const shouldRun = inView && !externallyPaused && !document.hidden;
+    if (shouldRun && !isRunning) {
+      isRunning = true;
+      frameId = requestAnimationFrame(draw);
+    } else if (!shouldRun && isRunning) {
+      isRunning = false;
+      cancelAnimationFrame(frameId);
+    }
+  }
+
+  // Pause when the drum scrolls out of view — no point animating off-screen.
+  const visObserver = new IntersectionObserver(
+    (entries) => {
+      inView = entries.some((e) => e.isIntersecting);
+      syncRunState();
+    },
+    { threshold: 0 }
+  );
+  visObserver.observe(container);
+
+  // Pause when the tab is backgrounded (saves CPU/battery).
+  const onVisibilityChange = () => syncRunState();
+  document.addEventListener("visibilitychange", onVisibilityChange);
+
+  syncRunState(); // boot (starts only if currently on screen)
 
   return {
     to,
     next: () => to(Math.min(last + 1, Math.round(target) + 1)),
     prev: () => to(Math.max(0, Math.round(target) - 1)),
     getActive: () => active,
+    // Let callers (e.g. a modal opened over the drum) release the compositor.
+    pause: () => { externallyPaused = true; syncRunState(); },
+    resume: () => { externallyPaused = false; syncRunState(); },
     destroy: () => {
+      externallyPaused = true;
       isRunning = false;
       cancelAnimationFrame(frameId);
       ro.disconnect();
+      visObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       stageEl.removeEventListener("wheel", onWheel);
       clearTimeout(settlingTimer);
     }
