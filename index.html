@@ -1636,21 +1636,36 @@
       block.__words = words;
       if (!words.length) return;
       if (_reduceMotion) { words.forEach(w => w.classList.add('lit')); return; }
-      let i = 0;
-      const step = () => {
-        for (let k = 0; k < words.length; k++) {
-          words[k].classList.toggle('lit', k <= i);
-          words[k].classList.toggle('reading', k === i);
-        }
-        i++;
-        if (i < words.length) {
-          const len = (words[i - 1].textContent || '').length;
-          block.__timer = setTimeout(step, Math.min(230, 80 + len * 20));
-        } else {
-          words.forEach(w => w.classList.remove('reading'));
-        }
+      // Group words into visual lines (by vertical position) so each line finishes before the next.
+      const lines = [];
+      let lastTop = null;
+      words.forEach((w) => {
+        const top = w.offsetTop;
+        if (lastTop === null || Math.abs(top - lastTop) > 3) { lines.push([]); lastTop = top; }
+        lines[lines.length - 1].push(w);
+      });
+      let li = 0;
+      const revealLine = () => {
+        const line = lines[li];
+        let wi = 0;
+        const stepWord = () => {
+          for (let k = 0; k < line.length; k++) {
+            line[k].classList.toggle('lit', k <= wi);
+            line[k].classList.toggle('reading', k === wi);
+          }
+          wi++;
+          if (wi < line.length) {
+            const len = (line[wi - 1].textContent || '').length;
+            block.__timer = setTimeout(stepWord, Math.min(150, 50 + len * 15));
+          } else {
+            line.forEach((w) => w.classList.remove('reading'));
+            li++;
+            if (li < lines.length) block.__timer = setTimeout(revealLine, 280); // finish line, pause, next line
+          }
+        };
+        stepWord();
       };
-      step();
+      revealLine();
     }
     function _stopBlock(block) { if (block && block.__timer) { clearTimeout(block.__timer); block.__timer = null; } }
 
