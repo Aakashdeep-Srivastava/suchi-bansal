@@ -313,7 +313,7 @@
     .read-word {
       color: #cbd5e1;                        /* unread (light grey) */
       -webkit-text-fill-color: #cbd5e1;      /* override inherited text-fill so color changes show */
-      transition: color 0.45s ease, -webkit-text-fill-color 0.45s ease, text-shadow 0.45s ease;
+      transition: color 0.2s ease, -webkit-text-fill-color 0.2s ease;
     }
     .read-word.lit { color: #0f172a; -webkit-text-fill-color: #0f172a; } /* read (dark, legible) */
     .read-word.reading {                     /* the word currently being read — black, slightly bold */
@@ -1610,12 +1610,14 @@
     }
     window.openProjectModal = openProjectModal;
 
-    // ---- Reading reveal for every .read-block (description, scope, highlights) + ElevenLabs voice on the description ----
-    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _ios = [], _narrToken = 0;
+    // ---- Scroll-driven reading highlight for every .read-word + ElevenLabs voice on the description ----
+    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _narrToken = 0;
+    let _card = null, _allWords = [], _copyWords = [], _onScroll = null, _onResize = null;
     const _reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const READ_LINE = 0.62;   // the "reading line" sits 62% down the modal viewport
+    const READ_BAND = 30;     // px band around the line counted as "currently reading"
 
-    // Run cb once the modal's images/video have loaded (so layout is settled before we
-    // measure what's in view) — with a fallback so we never hang.
+    // Run cb once the modal's images/video have loaded (so layout is settled) — with a fallback.
     function _whenMediaReady(cb) {
       const media = Array.from(document.querySelectorAll('#modal-project-body img, #modal-project-body video'));
       let called = false;
@@ -1631,102 +1633,92 @@
       setTimeout(go, 1500);
     }
 
-    function _revealBlock(block) {
-      const words = block.__words || Array.from(block.querySelectorAll('.read-word'));
-      block.__words = words;
-      if (!words.length) return;
-      if (_reduceMotion) { words.forEach(w => w.classList.add('lit')); return; }
-      // Group words into visual lines (by vertical position) so each line finishes before the next.
-      const lines = [];
-      let lastTop = null;
-      words.forEach((w) => {
-        const top = w.offsetTop;
-        if (lastTop === null || Math.abs(top - lastTop) > 3) { lines.push([]); lastTop = top; }
-        lines[lines.length - 1].push(w);
-      });
-      let li = 0;
-      const revealLine = () => {
-        const line = lines[li];
-        let wi = 0;
-        const stepWord = () => {
-          for (let k = 0; k < line.length; k++) {
-            line[k].classList.toggle('lit', k <= wi);
-            line[k].classList.toggle('reading', k === wi);
-          }
-          wi++;
-          if (wi < line.length) {
-            const len = (line[wi - 1].textContent || '').length;
-            block.__timer = setTimeout(stepWord, Math.min(150, 50 + len * 15));
-          } else {
-            line.forEach((w) => w.classList.remove('reading'));
-            li++;
-            if (li < lines.length) block.__timer = setTimeout(revealLine, 280); // finish line, pause, next line
-          }
-        };
-        stepWord();
-      };
-      revealLine();
+    // Cache each word's vertical position within the card's scroll content.
+    function _measureWords() {
+      if (!_card) return;
+      const cardTop = _card.getBoundingClientRect().top;
+      _allWords = Array.from(document.querySelectorAll('#modal-project-body .read-word'));
+      _allWords.forEach((w) => { w._top = w.getBoundingClientRect().top - cardTop + _card.scrollTop; });
     }
-    function _stopBlock(block) { if (block && block.__timer) { clearTimeout(block.__timer); block.__timer = null; } }
+
+    // Light words from the current scroll position — fully reversible when scrolling back up.
+    function _updateReading() {
+      if (!_card || !_allWords.length) return;
+      const voiceActive = _narrAudio && !_narrAudio.paused;
+      const line = _card.scrollTop + _card.clientHeight * READ_LINE;
+      for (let i = 0; i < _allWords.length; i++) {
+        const w = _allWords[i];
+        if (voiceActive && w.__isCopy) continue; // audio owns the description while it plays
+        const t = w._top;
+        if (t >= line) { w.classList.remove('lit', 'reading'); }
+        else if (t >= line - READ_BAND) { w.classList.add('lit', 'reading'); }
+        else { w.classList.add('lit'); w.classList.remove('reading'); }
+      }
+    }
 
     function stopNarration() {
-      _narrToken++; // invalidate any pending deferred observer setup
-      _ios.forEach(io => io.disconnect()); _ios = [];
-      document.querySelectorAll('#modal-project-body .read-block').forEach(_stopBlock);
+      _narrToken++;
+      if (_card && _onScroll) _card.removeEventListener('scroll', _onScroll);
+      if (_onResize) window.removeEventListener('resize', _onResize);
+      _onScroll = null; _onResize = null; _card = null; _allWords = []; _copyWords = [];
       if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
       if (_narrAudio) { _narrAudio.pause(); try { _narrAudio.currentTime = 0; } catch (e) {} }
       if (_narrBtn) _narrBtn.classList.remove('is-playing');
       _narrBtn = null;
     }
+
     function setupNarration() {
       const token = ++_narrToken;
-      const root = document.getElementById('project-modal-card') || null;
-      // Each readable block illuminates word-by-word ONLY when it scrolls into view.
-      // Defer observing until media has loaded + one frame, so below-the-fold blocks
-      // aren't momentarily "in view" on open (which made them all animate at once).
-      _whenMediaReady(() => {
-        if (token !== _narrToken) return;                 // modal closed / reopened
-        requestAnimationFrame(() => {
+      _card = document.getElementById('project-modal-card');
+      if (!_card) return;
+      const copy = document.querySelector('#modal-project-body .read-copy');
+      _copyWords = copy ? Array.from(copy.querySelectorAll('.read-word')) : [];
+      _copyWords.forEach((w) => { w.__isCopy = true; });
+
+      if (_reduceMotion) {
+        document.querySelectorAll('#modal-project-body .read-word').forEach((w) => w.classList.add('lit'));
+      } else {
+        _whenMediaReady(() => {
           if (token !== _narrToken) return;
-          document.querySelectorAll('#modal-project-body .read-block').forEach((block) => {
-            if (!block.querySelector('.read-word')) return;
-            if ('IntersectionObserver' in window) {
-              const io = new IntersectionObserver((entries) => {
-                entries.forEach((e) => { if (e.isIntersecting) { io.disconnect(); _revealBlock(block); } });
-              }, { root, threshold: 0.6 });
-              io.observe(block); _ios.push(io);
-            } else { _revealBlock(block); }
+          requestAnimationFrame(() => {
+            if (token !== _narrToken) return;
+            _measureWords();
+            let raf = false;
+            _onScroll = () => { if (!raf) { raf = true; requestAnimationFrame(() => { raf = false; _updateReading(); }); } };
+            _card.addEventListener('scroll', _onScroll, { passive: true });
+            _onResize = () => { _measureWords(); _updateReading(); };
+            window.addEventListener('resize', _onResize, { passive: true });
+            _updateReading(); // initial state from the current scroll position
           });
         });
-      });
+      }
 
-      // Voice button drives the DESCRIPTION block (.read-copy), synced to the audio
+      // Voice button: plays the ElevenLabs narration and drives the description from audio
       const btn = document.querySelector('#modal-project-body .narrate-btn');
       if (!btn) return;
-      const copy = document.querySelector('#modal-project-body .read-copy');
-      const copyWords = copy ? Array.from(copy.querySelectorAll('.read-word')) : [];
       const setCopyLit = (n) => {
-        for (let k = 0; k < copyWords.length; k++) {
-          copyWords[k].classList.toggle('lit', k < n);
-          copyWords[k].classList.toggle('reading', k === n - 1 && n < copyWords.length);
+        for (let k = 0; k < _copyWords.length; k++) {
+          _copyWords[k].classList.toggle('lit', k < n);
+          _copyWords[k].classList.toggle('reading', k === n - 1 && n < _copyWords.length);
         }
       };
       btn.addEventListener('click', () => {
         const src = btn.getAttribute('data-audio');
-        if (_narrAudio && !_narrAudio.paused && _narrBtn === btn) { // pause
-          _narrAudio.pause(); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } btn.classList.remove('is-playing'); return;
+        if (_narrAudio && !_narrAudio.paused && _narrBtn === btn) { // pause → hand control back to scroll
+          _narrAudio.pause(); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
+          btn.classList.remove('is-playing'); _updateReading(); return;
         }
-        _stopBlock(copy); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } // audio takes over the description
+        if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
         if (!_narrAudio) _narrAudio = new Audio();
         if (!_narrAudio.src || _narrAudio.src.indexOf(src) === -1) { _narrAudio.src = src; try { _narrAudio.currentTime = 0; } catch (e) {} }
         _narrBtn = btn;
-        _narrAudio.onended = () => { setCopyLit(copyWords.length); copyWords.forEach(w => w.classList.remove('reading')); btn.classList.remove('is-playing'); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } };
+        _narrAudio.onended = () => { setCopyLit(_copyWords.length); _copyWords.forEach((w) => w.classList.remove('reading')); btn.classList.remove('is-playing'); if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; } };
         const tick = () => {
-          if (_narrAudio.duration) setCopyLit(Math.round((_narrAudio.currentTime / _narrAudio.duration) * copyWords.length));
+          if (_narrAudio.duration) setCopyLit(Math.round((_narrAudio.currentTime / _narrAudio.duration) * _copyWords.length));
           if (!_narrAudio.paused) _narrRAF = requestAnimationFrame(tick);
         };
         _narrAudio.play().then(() => { btn.classList.add('is-playing'); _narrRAF = requestAnimationFrame(tick); })
-          .catch(() => { setCopyLit(copyWords.length); btn.classList.remove('is-playing'); });
+          .catch(() => { setCopyLit(_copyWords.length); btn.classList.remove('is-playing'); });
       });
     }
 
