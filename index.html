@@ -361,7 +361,9 @@
       width: 100%;
       max-width: 1180px;
       display: block;
-      aspect-ratio: 16 / 9;
+      /* default ratio for 16:9 decks; a deck can override via --slide-ratio */
+      aspect-ratio: var(--slide-ratio, 16 / 9);
+      object-fit: contain;
       background: #fff;
       /* a full slide fills the viewport height and snaps into place */
       scroll-snap-align: center;
@@ -1845,6 +1847,9 @@
       if (deck.pdf) { openBtn.href = deck.pdf; openBtn.classList.remove('hidden'); }
       else { openBtn.classList.add('hidden'); }
 
+      // Slides default to 16:9; a deck (e.g. a certificate) can set its own ratio.
+      pages.style.setProperty('--slide-ratio', deck.ratio || '16 / 9');
+
       // Build slides once per deck (keyed by the first slide path)
       if (pages.getAttribute('data-deck') !== deck.slides[0]) {
         pages.innerHTML = '';
@@ -2190,7 +2195,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=5';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=7';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');

@@ -58,6 +58,14 @@ export const DEFAULT_WORKS = [
     description: "EcoVoyage – a scalable B2B and B2C Carbon Offset as a Service platform with subscription and corporate-partnership monetization, targeting ₹150+ Crore revenue within three years. Winner at Mind the Product's E-Summit '25 (Synergy of Genesis).",
     image: "Landing Page Assest/ecovoyage.png",
     src: "Landing Page Assest/ecovoyage.png",
+    deck: {
+      label: "Eco Ventures — Pitch Deck",
+      title: "EcoVoyage",
+      pdf: "Landing Page Assest/EcoVoyage-Eco-Ventures.pdf",
+      slides: Array.from({ length: 13 }, (_, i) =>
+        `Landing Page Assest/ecovoyage-deck/slide-${String(i + 1).padStart(2, "0")}.webp`
+      )
+    },
     stats: "₹150+ Crore 3-Year Target · B2B/B2C Monetization · Carbon Offset SaaS",
     tools: ["Product Vision", "Monetization", "Partnerships", "GTM"],
     deliverables: ["Carbon-Offset Platform Concept", "Subscription & Partnership Models", "Go-to-Market Strategy"]
@@ -68,6 +76,13 @@ export const DEFAULT_WORKS = [
     description: "EcoCreds – a platform that incentivizes sustainable actions like green travel, eco-friendly hotel stays, and low-impact events through a gamified rewards system. The strategy: incentivize 100K+ sustainable actions and run carbon-credit programs across 50+ businesses in transport, hospitality, and events, contributing to a 15–20% reduction in carbon footprint.",
     image: "Landing Page Assest/ecocreds.png",
     src: "Landing Page Assest/ecocreds.png",
+    deck: {
+      label: "Winner Certificate",
+      title: "EcoCreds — CESD Sustainability Hackathon 2025",
+      pdf: "Landing Page Assest/EcoCreds-Certificate-Suchi-Bansal.pdf",
+      ratio: "756 / 553",
+      slides: ["Landing Page Assest/ecocreds-certificate/certificate-01.webp"]
+    },
     stats: "100K+ Sustainable Actions · 50+ Businesses · 15–20% Footprint Cut",
     tools: ["Product Discovery", "Gamification", "Carbon Credits", "GTM"],
     deliverables: ["Rewards & Gamification Mechanics", "Carbon-Credit Program Design", "Business Partnership Model"]
