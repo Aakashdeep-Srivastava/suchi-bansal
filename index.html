@@ -353,6 +353,52 @@
     }
 
     /* ============================================================
+       PITCH-DECK VIEWER — clean, PDF-style full-screen reader
+       ============================================================ */
+    .deck-modal {
+      /* soft dimmed backdrop, not a hard black box */
+      background: rgba(10, 10, 12, 0.92);
+    }
+    .deck-pages {
+      /* neutral "paper" canvas like a real PDF/Docs viewer — no black */
+      background: #e9e9ec;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+      padding: 0;
+      overflow-anchor: none;
+      /* each scroll settles on the next slide */
+      scroll-snap-type: y mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+    .deck-pages .deck-slide {
+      width: 100%;
+      max-width: 1180px;
+      display: block;
+      aspect-ratio: 16 / 9;
+      background: #fff;
+      /* a full slide fills the viewport height and snaps into place */
+      scroll-snap-align: center;
+      scroll-snap-stop: always;
+    }
+    /* comfortable breathing room above/below so a 16:9 slide centers nicely */
+    .deck-pages { padding: max(3vh, 1rem) 1rem; gap: max(3vh, 1rem); }
+    @media (max-width: 640px) {
+      .deck-pages { padding: 0.5rem; gap: 0.5rem; }
+      .deck-pages .deck-slide { border-radius: 6px; }
+    }
+    /* slim scrollbar that matches the light canvas */
+    .deck-pages::-webkit-scrollbar { width: 10px; }
+    .deck-pages::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.25); border-radius: 10px; border: 2px solid #e9e9ec; }
+    .deck-pages::-webkit-scrollbar-track { background: transparent; }
+    .deck-slide { border-radius: 10px; box-shadow: 0 10px 30px -12px rgba(0,0,0,0.35); }
+    @media (prefers-reduced-motion: reduce) {
+      .deck-pages { scroll-behavior: auto; scroll-snap-type: none; }
+    }
+
+    /* ============================================================
        EXPERIENCE HORIZONTAL SPATIAL CANVAS
        ============================================================ */
     #exp-horizontal-stage {
@@ -1259,28 +1305,24 @@
     </div>
   </div>
 
-  <!-- MODAL: Pitch-Deck Viewer (in-page, no navigation away) — slides render as images, scrollable + downloadable -->
-  <div id="deck-modal" onclick="if(event.target === this) closeDeckModal()" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-3 sm:p-6">
-    <div class="bg-[#0D0D0D] border border-white/10 rounded-2xl w-full max-w-5xl h-[92vh] flex flex-col overflow-hidden shadow-2xl">
-      <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 shrink-0">
-        <div class="flex flex-col min-w-0">
-          <span id="deck-modal-label" class="text-[10px] font-bold tracking-widest uppercase text-neutral-500 truncate">Go-To-Market Strategy</span>
-          <span id="deck-modal-title" class="text-sm font-bold tracking-wide uppercase text-white truncate">ReachifyMe</span>
-        </div>
-        <div class="flex items-center gap-2 shrink-0">
-          <span id="deck-modal-counter" class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full border border-white/10 text-[10px] font-mono tracking-wider text-neutral-400">01 / 14</span>
-          <a id="deck-modal-open" href="#" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/20 text-[11px] font-semibold tracking-wider uppercase text-neutral-300 hover:text-white hover:border-white/40 transition">
-            Open in new tab
-          </a>
-          <a id="deck-modal-download" href="#" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-black text-[11px] font-bold tracking-wider uppercase hover:bg-neutral-200 transition">
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-            Download
-          </a>
-          <button onclick="closeDeckModal()" aria-label="Close deck" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white/40 transition">✕</button>
-        </div>
+  <!-- MODAL: Pitch-Deck Viewer — clean full-screen PDF-style viewer: scroll brings the next slide into view -->
+  <div id="deck-modal" class="deck-modal fixed inset-0 z-[60] opacity-0 pointer-events-none transition-opacity duration-300">
+    <!-- The scrolling canvas IS the viewer: slides stack edge-to-edge on a soft neutral page, no boxed chrome -->
+    <div id="deck-pages" class="deck-pages absolute inset-0 overflow-y-auto overscroll-contain"></div>
+
+    <!-- Slim floating top bar (sits over the slides, fades with the viewer) -->
+    <div class="deck-bar absolute top-0 inset-x-0 z-10 flex items-center justify-between gap-3 px-4 sm:px-6 py-3 pointer-events-none">
+      <div class="flex flex-col min-w-0 pointer-events-auto px-3 py-1.5 rounded-xl bg-black/40 backdrop-blur-md border border-white/15">
+        <span id="deck-modal-label" class="text-[9px] sm:text-[10px] font-bold tracking-widest uppercase text-white/70 truncate leading-tight">Go-To-Market Strategy</span>
+        <span id="deck-modal-title" class="text-xs sm:text-sm font-bold tracking-wide uppercase text-white truncate leading-tight">ReachifyMe</span>
       </div>
-      <!-- Slides stacked vertically: scroll down to move through the deck. Renders reliably on every device. -->
-      <div id="deck-pages" class="flex-1 min-h-0 overflow-y-auto bg-neutral-800 flex flex-col items-center gap-4 p-3 sm:p-5 scroll-smooth" style="overflow-anchor: none;"></div>
+      <div class="flex items-center gap-2 shrink-0 pointer-events-auto">
+        <span id="deck-modal-counter" class="inline-flex items-center px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-[10px] font-mono tracking-wider text-white/90">01 / 14</span>
+        <a id="deck-modal-open" href="#" target="_blank" rel="noopener" title="Open the PDF in a new tab" class="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-white/80 hover:text-white hover:bg-black/60 transition" aria-label="Open PDF in new tab">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5h5v5m0-5L10 14M19 13v6H5V5h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
+        <button onclick="closeDeckModal()" aria-label="Close deck" class="w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/15 flex items-center justify-center text-white/80 hover:text-white hover:bg-black/60 transition">✕</button>
+      </div>
     </div>
   </div>
 
@@ -1797,7 +1839,7 @@
       document.body.style.overflow = '';
     }
 
-    // Pitch-deck viewer: builds the slide list on open, counts slides as you scroll, PDF stays downloadable.
+    // Pitch-deck viewer: a clean PDF-style reader — slides snap into view as you scroll.
     let deckCounterObserver = null;
     function openDeckModal(deck) {
       if (!deck || !Array.isArray(deck.slides) || !deck.slides.length) return;
@@ -1810,15 +1852,10 @@
       const counter = document.getElementById('deck-modal-counter');
       counter.textContent = `01 / ${String(total).padStart(2, '0')}`;
 
+      // "Open in new tab" is the only PDF action now (no Download button).
       const openBtn = document.getElementById('deck-modal-open');
-      const dlBtn = document.getElementById('deck-modal-download');
-      if (deck.pdf) {
-        openBtn.href = deck.pdf; openBtn.classList.remove('hidden');
-        dlBtn.href = deck.pdf; dlBtn.classList.remove('hidden');
-      } else {
-        openBtn.classList.add('hidden');
-        dlBtn.classList.add('hidden');
-      }
+      if (deck.pdf) { openBtn.href = deck.pdf; openBtn.classList.remove('hidden'); }
+      else { openBtn.classList.add('hidden'); }
 
       // Build slides once per deck (keyed by the first slide path)
       if (pages.getAttribute('data-deck') !== deck.slides[0]) {
@@ -1829,17 +1866,31 @@
           img.alt = `${deck.title || 'Slide'} — slide ${i + 1} of ${total}`;
           img.loading = i < 2 ? 'eager' : 'lazy';
           img.setAttribute('data-slide', String(i + 1));
-          img.className = 'w-full max-w-4xl block rounded-lg shadow-2xl bg-white';
-          // Reserve each slide's height up-front so lazy-loading images never
-          // shift layout (which would make scroll-anchoring jump off slide 1).
-          img.style.aspectRatio = '16 / 9';
+          // .deck-slide reserves 16:9 space up-front, so lazy images never shift
+          // layout (which would knock scroll-snap off the first slide).
+          img.className = 'deck-slide';
           pages.appendChild(img);
         });
         pages.setAttribute('data-deck', deck.slides[0]);
       }
-      pages.scrollTop = 0;
+      // Force the viewer to open on slide 1. Mandatory scroll-snap + smooth
+      // behaviour can otherwise re-snap to a neighbouring slide, so reset with
+      // snapping/smoothness momentarily off, then again on the next frame.
+      const resetToTop = () => {
+        const prevSnap = pages.style.scrollSnapType;
+        pages.style.scrollBehavior = 'auto';
+        pages.style.scrollSnapType = 'none';
+        pages.scrollTop = 0;
+        // restore on the next frame once the position has settled
+        requestAnimationFrame(() => {
+          pages.scrollTop = 0;
+          pages.style.scrollSnapType = prevSnap || '';
+          pages.style.scrollBehavior = '';
+        });
+      };
+      resetToTop();
 
-      // Update the "01 / 14" counter as slides scroll into view
+      // Keep the "01 / 14" counter in sync with whichever slide is centered.
       if (deckCounterObserver) deckCounterObserver.disconnect();
       deckCounterObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
@@ -1848,8 +1899,8 @@
             counter.textContent = `${String(n).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
           }
         });
-      }, { root: pages, threshold: 0.5 });
-      pages.querySelectorAll('img[data-slide]').forEach((img) => deckCounterObserver.observe(img));
+      }, { root: pages, threshold: 0.6 });
+      pages.querySelectorAll('.deck-slide').forEach((img) => deckCounterObserver.observe(img));
 
       modal.classList.remove('opacity-0', 'pointer-events-none');
       document.body.style.overflow = 'hidden';
