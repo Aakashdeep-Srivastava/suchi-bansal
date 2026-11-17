@@ -10,7 +10,7 @@ export const DEFAULT_ITEMS = [
     subtitle: 'AI Sleep Coaching — Samsung Health',
     description: 'With the Samsung Health app and the Sleep tile on Galaxy Watch, users can view their sleep time, record snoring, and follow AI-driven sleep coaching. I owned discovery, strategy, and launch for Sleep Coach — a personalized, AI-powered system that turns raw sleep tracking into actionable guidance.',
     narration: 'assets/narration/sleep-coach.mp3',
-    video: 'assets/sleep-coach.mp4',
+    video: 'assets/sleep-coach.mp4?v=2',
     images: [
       'Project Images/sleep-coach-shot-3.jpg',
       'Project Images/sleep-coach-shot-1.jpg',
@@ -41,7 +41,7 @@ export const DEFAULT_ITEMS = [
     subtitle: 'Hands-Free Rider Safety — Galaxy J Series',
     description: 'The only dedicated phone safety feature for two-wheeler riders in India — a hands-free mode that intelligently manages calls and alerts so riders stay focused on the road. Part of Samsung’s “Make for India” innovations, it reached ~50% adoption among Galaxy J Series users. I owned problem definition, research, design, and launch.',
     narration: 'assets/narration/s-bike-mode.mp3',
-    video: 'assets/s-bike-mode.mp4',
+    video: 'assets/s-bike-mode.mp4?v=2',
     images: [
       'Project Images/s-bike-shot-1.jpg',
       'Project Images/s-bike-shot-2.jpg'
@@ -74,7 +74,7 @@ export const DEFAULT_ITEMS = [
     subtitle: 'Samsung Health × Tata 1mg Integration',
     description: 'Allows users to keep track of their prescribed or over-the-counter medication regime, with important medical information and tips, and helps track medication-adherence consistency for those on a medication journey. Built inside Samsung Health through a strategic Tata 1mg integration — I owned the vision, roadmap, partnership, and launch.',
     narration: 'assets/narration/medication-tracking.mp3',
-    video: 'assets/medication-tracking.mp4',
+    video: 'assets/medication-tracking.mp4?v=2',
     flow: [
       'Project Images/med-flow-1.jpg',
       'Project Images/med-flow-2.jpg',
@@ -108,7 +108,7 @@ export const DEFAULT_ITEMS = [
     subtitle: 'Make for India — Data Savings (Opera Max)',
     description: 'A feature that reduces mobile data usage by limiting background data for apps — apps don’t use data unless actively in use, helping users save their data plan. A flagship “Make for India” innovation delivering meaningful savings across video streaming, chat, shopping, music, and news.',
     narration: 'assets/narration/ultra-data-saving.mp3',
-    video: 'assets/ultra-data-saving.mp4',
+    video: 'assets/ultra-data-saving.mp4?v=2',
     images: [ 'Project Images/uds-shot-1.jpg' ],
     scope: [
       { title: 'Uncovering Market Gaps & User Pain Points', detail: 'Ran competitive analysis and user research on data-consumption patterns across India and APAC; identified pain points around high mobile-data costs, and partnered with network operators to validate data-compression opportunities.' },

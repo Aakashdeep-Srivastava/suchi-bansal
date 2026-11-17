@@ -203,9 +203,12 @@ F.append(Paragraph('English, Hindi, Korean', S['body']))
 doc.build(F)
 print('built', PDF)
 
-# Rasterize pages to PNG for the in-page modal viewer
+# Rasterize pages to WebP for the in-page modal viewer (smaller than PNG)
+import io
 import pymupdf
+from PIL import Image
 d = pymupdf.open(PDF)
 for i in range(d.page_count):
-    d[i].get_pixmap(dpi=150).save(f'assets/resume-page-{i+1}.png')
-print('rendered', d.page_count, 'page images')
+    pix = d[i].get_pixmap(dpi=150)
+    Image.open(io.BytesIO(pix.tobytes('png'))).save(f'assets/resume-page-{i+1}.webp', 'WEBP', quality=88)
+print('rendered', d.page_count, 'page images (webp)')
