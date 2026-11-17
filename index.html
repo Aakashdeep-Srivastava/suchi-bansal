@@ -1611,8 +1611,25 @@
     window.openProjectModal = openProjectModal;
 
     // ---- Reading reveal for every .read-block (description, scope, highlights) + ElevenLabs voice on the description ----
-    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _ios = [];
+    let _narrAudio = null, _narrRAF = null, _narrBtn = null, _ios = [], _narrToken = 0;
     const _reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Run cb once the modal's images/video have loaded (so layout is settled before we
+    // measure what's in view) — with a fallback so we never hang.
+    function _whenMediaReady(cb) {
+      const media = Array.from(document.querySelectorAll('#modal-project-body img, #modal-project-body video'));
+      let called = false;
+      const go = () => { if (!called) { called = true; cb(); } };
+      if (!media.length) { go(); return; }
+      let pending = media.length;
+      const one = () => { if (--pending <= 0) go(); };
+      media.forEach((el) => {
+        const loaded = el.tagName === 'IMG' ? el.complete : el.readyState >= 1;
+        if (loaded) { one(); return; }
+        ['load', 'loadedmetadata', 'error'].forEach((ev) => el.addEventListener(ev, one, { once: true }));
+      });
+      setTimeout(go, 1500);
+    }
 
     function _revealBlock(block) {
       const words = block.__words || Array.from(block.querySelectorAll('.read-word'));
@@ -1638,6 +1655,7 @@
     function _stopBlock(block) { if (block && block.__timer) { clearTimeout(block.__timer); block.__timer = null; } }
 
     function stopNarration() {
+      _narrToken++; // invalidate any pending deferred observer setup
       _ios.forEach(io => io.disconnect()); _ios = [];
       document.querySelectorAll('#modal-project-body .read-block').forEach(_stopBlock);
       if (_narrRAF) { cancelAnimationFrame(_narrRAF); _narrRAF = null; }
@@ -1646,16 +1664,25 @@
       _narrBtn = null;
     }
     function setupNarration() {
+      const token = ++_narrToken;
       const root = document.getElementById('project-modal-card') || null;
-      // Every readable block illuminates word-by-word when it scrolls into view
-      document.querySelectorAll('#modal-project-body .read-block').forEach((block) => {
-        if (!block.querySelector('.read-word')) return;
-        if ('IntersectionObserver' in window) {
-          const io = new IntersectionObserver((entries) => {
-            entries.forEach((e) => { if (e.isIntersecting) { io.disconnect(); _revealBlock(block); } });
-          }, { root, threshold: 0.3 });
-          io.observe(block); _ios.push(io);
-        } else { _revealBlock(block); }
+      // Each readable block illuminates word-by-word ONLY when it scrolls into view.
+      // Defer observing until media has loaded + one frame, so below-the-fold blocks
+      // aren't momentarily "in view" on open (which made them all animate at once).
+      _whenMediaReady(() => {
+        if (token !== _narrToken) return;                 // modal closed / reopened
+        requestAnimationFrame(() => {
+          if (token !== _narrToken) return;
+          document.querySelectorAll('#modal-project-body .read-block').forEach((block) => {
+            if (!block.querySelector('.read-word')) return;
+            if ('IntersectionObserver' in window) {
+              const io = new IntersectionObserver((entries) => {
+                entries.forEach((e) => { if (e.isIntersecting) { io.disconnect(); _revealBlock(block); } });
+              }, { root, threshold: 0.6 });
+              io.observe(block); _ios.push(io);
+            } else { _revealBlock(block); }
+          });
+        });
       });
 
       // Voice button drives the DESCRIPTION block (.read-copy), synced to the audio
