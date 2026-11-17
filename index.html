@@ -257,7 +257,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="FlexCarousel.css">
+  <link rel="stylesheet" href="FlexCarousel.css?v=2">
   <style>
     /* ============================================================
        SCROLL-DRIVEN HEADLINE: white light fills letters from the
@@ -2023,7 +2023,7 @@
 
   <!-- FlexCarousel Initialization (React Bits Component Engine) -->
   <script type="module">
-    import { initFlexCarousel, DEFAULT_ITEMS } from './flex-carousel.js';
+    import { initFlexCarousel, DEFAULT_ITEMS } from './flex-carousel.js?v=2';
 
     function startCarousel() {
       const container = document.getElementById('flex-carousel-container');
@@ -2055,7 +2055,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=2';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');
@@ -2089,8 +2089,8 @@
       startWorksWheel();
     }
   </script>
-  <script type="module" src="./scroll-expand-media.js"></script>
-  <script type="module" src="./experience-section.js"></script>
+  <script type="module" src="./scroll-expand-media.js?v=2"></script>
+  <script type="module" src="./experience-section.js?v=2"></script>
 
   <!-- Hero portrait: switch to the red rim-light portrait once scrolling begins -->
   <script>
