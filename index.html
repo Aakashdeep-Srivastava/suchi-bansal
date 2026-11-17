@@ -1259,6 +1259,31 @@
     </div>
   </div>
 
+  <!-- MODAL: Pitch-Deck Viewer (in-page, no navigation away) — slides render as images, scrollable + downloadable -->
+  <div id="deck-modal" onclick="if(event.target === this) closeDeckModal()" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300 flex items-center justify-center p-3 sm:p-6">
+    <div class="bg-[#0D0D0D] border border-white/10 rounded-2xl w-full max-w-5xl h-[92vh] flex flex-col overflow-hidden shadow-2xl">
+      <div class="flex items-center justify-between px-4 sm:px-6 py-3 border-b border-white/10 shrink-0">
+        <div class="flex flex-col min-w-0">
+          <span id="deck-modal-label" class="text-[10px] font-bold tracking-widest uppercase text-neutral-500 truncate">Go-To-Market Strategy</span>
+          <span id="deck-modal-title" class="text-sm font-bold tracking-wide uppercase text-white truncate">ReachifyMe</span>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span id="deck-modal-counter" class="hidden md:inline-flex items-center px-2.5 py-1 rounded-full border border-white/10 text-[10px] font-mono tracking-wider text-neutral-400">01 / 14</span>
+          <a id="deck-modal-open" href="#" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/20 text-[11px] font-semibold tracking-wider uppercase text-neutral-300 hover:text-white hover:border-white/40 transition">
+            Open in new tab
+          </a>
+          <a id="deck-modal-download" href="#" download class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white text-black text-[11px] font-bold tracking-wider uppercase hover:bg-neutral-200 transition">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Download
+          </a>
+          <button onclick="closeDeckModal()" aria-label="Close deck" class="w-8 h-8 rounded-full border border-white/20 flex items-center justify-center text-neutral-400 hover:text-white hover:border-white/40 transition">✕</button>
+        </div>
+      </div>
+      <!-- Slides stacked vertically: scroll down to move through the deck. Renders reliably on every device. -->
+      <div id="deck-pages" class="flex-1 min-h-0 overflow-y-auto bg-neutral-800 flex flex-col items-center gap-4 p-3 sm:p-5 scroll-smooth" style="overflow-anchor: none;"></div>
+    </div>
+  </div>
+
   <!-- MODAL: Project Detail Modal -->
   <div id="project-modal" onclick="if(event.target === this) closeProjectModal()" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none flex items-center justify-center p-4">
     <div id="project-modal-card" class="bg-white rounded-[32px] max-w-2xl w-full max-h-[90vh] overflow-y-auto no-scrollbar p-6 sm:p-8 md:p-9 shadow-2xl border border-neutral-100 opacity-0 scale-[0.94] translate-y-4 relative">
@@ -1772,6 +1797,73 @@
       document.body.style.overflow = '';
     }
 
+    // Pitch-deck viewer: builds the slide list on open, counts slides as you scroll, PDF stays downloadable.
+    let deckCounterObserver = null;
+    function openDeckModal(deck) {
+      if (!deck || !Array.isArray(deck.slides) || !deck.slides.length) return;
+      const modal = document.getElementById('deck-modal');
+      const pages = document.getElementById('deck-pages');
+      const total = deck.slides.length;
+
+      document.getElementById('deck-modal-label').textContent = deck.label || 'Pitch Deck';
+      document.getElementById('deck-modal-title').textContent = deck.title || '';
+      const counter = document.getElementById('deck-modal-counter');
+      counter.textContent = `01 / ${String(total).padStart(2, '0')}`;
+
+      const openBtn = document.getElementById('deck-modal-open');
+      const dlBtn = document.getElementById('deck-modal-download');
+      if (deck.pdf) {
+        openBtn.href = deck.pdf; openBtn.classList.remove('hidden');
+        dlBtn.href = deck.pdf; dlBtn.classList.remove('hidden');
+      } else {
+        openBtn.classList.add('hidden');
+        dlBtn.classList.add('hidden');
+      }
+
+      // Build slides once per deck (keyed by the first slide path)
+      if (pages.getAttribute('data-deck') !== deck.slides[0]) {
+        pages.innerHTML = '';
+        deck.slides.forEach((src, i) => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = `${deck.title || 'Slide'} — slide ${i + 1} of ${total}`;
+          img.loading = i < 2 ? 'eager' : 'lazy';
+          img.setAttribute('data-slide', String(i + 1));
+          img.className = 'w-full max-w-4xl block rounded-lg shadow-2xl bg-white';
+          // Reserve each slide's height up-front so lazy-loading images never
+          // shift layout (which would make scroll-anchoring jump off slide 1).
+          img.style.aspectRatio = '16 / 9';
+          pages.appendChild(img);
+        });
+        pages.setAttribute('data-deck', deck.slides[0]);
+      }
+      pages.scrollTop = 0;
+
+      // Update the "01 / 14" counter as slides scroll into view
+      if (deckCounterObserver) deckCounterObserver.disconnect();
+      deckCounterObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const n = entry.target.getAttribute('data-slide');
+            counter.textContent = `${String(n).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+          }
+        });
+      }, { root: pages, threshold: 0.5 });
+      pages.querySelectorAll('img[data-slide]').forEach((img) => deckCounterObserver.observe(img));
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      document.body.style.overflow = 'hidden';
+    }
+    window.openDeckModal = openDeckModal;
+
+    function closeDeckModal() {
+      const modal = document.getElementById('deck-modal');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      if (deckCounterObserver) { deckCounterObserver.disconnect(); deckCounterObserver = null; }
+      document.body.style.overflow = '';
+    }
+    window.closeDeckModal = closeDeckModal;
+
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         const modal = document.getElementById('project-modal');
@@ -1781,6 +1873,10 @@
         const rmodal = document.getElementById('resume-modal');
         if (rmodal && !rmodal.classList.contains('pointer-events-none')) {
           closeResumeModal();
+        }
+        const dmodal = document.getElementById('deck-modal');
+        if (dmodal && !dmodal.classList.contains('pointer-events-none')) {
+          closeDeckModal();
         }
       }
     });
@@ -2055,7 +2151,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=2';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=4';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');
@@ -2065,9 +2161,11 @@
           label: "Works '26",
           action: "",
           onSelect: (index, item) => {
-            // Tapping the card opens it directly: a linked recognition opens its link,
-            // otherwise the project detail modal.
-            if (item.link) {
+            // Tapping the card opens it directly: a deck opens the in-page pitch-deck viewer,
+            // a linked recognition opens its link, otherwise the project detail modal.
+            if (item.deck && window.openDeckModal) {
+              window.openDeckModal(item.deck);
+            } else if (item.link) {
               window.open(item.link, '_blank', 'noopener');
             } else if (window.openProjectModal) {
               window.openProjectModal(item);

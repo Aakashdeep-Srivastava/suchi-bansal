@@ -4,8 +4,8 @@
  */
 
 const CARD_H = 0.38; // front card height, of the stage
-const CARD_MAX_W = 0.34; // ... but never wider than this much of the stage
-const CARD_RATIO = 1.45; // card width / height
+const CARD_MAX_W = 0.42; // ... but never wider than this much of the stage
+const CARD_RATIO = 1.795; // card width / height — matches the 16:9 recognition slides so nothing is cropped
 const STEP = 40; // degrees between cards on the drum
 const DRUM = 2.22; // drum radius, in card heights - and everything below likewise
 const LENS = 2.7; // perspective distance
@@ -40,7 +40,14 @@ export const DEFAULT_WORKS = [
     description: "A US market-expansion GTM for ReachifyMe – a multi-channel acquisition plan targeting 100+ paid users at $14/month with 65% gross margins. Growing through organic channels (Reddit, Twitter, incubators & accelerators) cut customer acquisition cost from $200 to $50.",
     image: "Landing Page Assest/reachifyme-gtm.png",
     src: "Landing Page Assest/reachifyme-gtm.png",
-    link: "https://drive.google.com/file/d/1Sfnlhc80Fi1jH4P0I6wBTrbXdB41NpC8/view",
+    deck: {
+      label: "Go-To-Market Strategy",
+      title: "ReachifyMe",
+      pdf: "Landing Page Assest/ReachifyMe-Go-To-Market-Strategy.pdf",
+      slides: Array.from({ length: 14 }, (_, i) =>
+        `Landing Page Assest/reachifyme-deck/slide-${String(i + 1).padStart(2, "0")}.webp`
+      )
+    },
     stats: "100+ paid users · $14/mo · 65% gross margin · CAC $200 → $50",
     tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
     deliverables: ["Multi-Channel Acquisition Plan", "Organic Growth (Reddit, X, Accelerators)", "Unit Economics & Margins"]
@@ -134,14 +141,17 @@ export function initWorksWheel(container, options = {}) {
     gradientOverlay.className = "pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent";
     face.appendChild(gradientOverlay);
 
-    // Bottom subtle info badge on card
+    // Bottom subtle info badge on card — full title, wraps so the overlapping label is fully visible
     const cardInfo = document.createElement("div");
-    cardInfo.className = "pointer-events-none absolute left-3.5 bottom-3.5 right-3.5 flex items-center justify-between";
-    cardInfo.innerHTML = `
-      <span class="text-[11px] font-mono tracking-wider text-white drop-shadow-sm font-semibold truncate max-w-full">
-        ${item.title}
-      </span>
-    `;
+    cardInfo.className = "pointer-events-none absolute left-3.5 bottom-3.5 right-3.5 flex items-center";
+    const titleSpan = document.createElement("span");
+    titleSpan.className = "text-[11px] md:text-xs font-mono tracking-wider text-white drop-shadow-sm font-semibold leading-snug";
+    titleSpan.style.display = "-webkit-box";
+    titleSpan.style.webkitBoxOrient = "vertical";
+    titleSpan.style.webkitLineClamp = "2";
+    titleSpan.style.overflow = "hidden";
+    titleSpan.textContent = item.title;
+    cardInfo.appendChild(titleSpan);
     face.appendChild(cardInfo);
 
     card.appendChild(face);
@@ -292,22 +302,35 @@ export function initWorksWheel(container, options = {}) {
 
   // Pointer drag interaction
   let isPointerDown = false;
+  let isCaptured = false;
   let dragStartY = 0;
   let dragDelta = 0;
+  let activePointerId = null;
 
   stageEl.addEventListener("pointerdown", (event) => {
     isPointerDown = true;
+    isCaptured = false;
+    activePointerId = event.pointerId;
     dragStartY = event.clientY;
     dragDelta = 0;
-    try {
-      stageEl.setPointerCapture(event.pointerId);
-    } catch (_) {}
+    // NOTE: we deliberately do NOT capture the pointer here. Capturing on
+    // pointerdown reassigns the subsequent `click` target to the stage and
+    // swallows the card's own click handler — so a plain tap would never open
+    // the card. Instead we capture lazily once a real drag begins (below).
   });
 
   stageEl.addEventListener("pointermove", (event) => {
     if (!isPointerDown) return;
     const diff = dragStartY - event.clientY;
     dragDelta += Math.abs(diff);
+    // Once the gesture is clearly a drag, capture the pointer so tracking
+    // continues even if it leaves the stage. A tap never reaches this point.
+    if (!isCaptured && dragDelta > 6) {
+      try {
+        stageEl.setPointerCapture(event.pointerId);
+        isCaptured = true;
+      } catch (_) {}
+    }
     to(target + diff / DRAG_UNITS);
     dragStartY = event.clientY;
   });
@@ -315,9 +338,13 @@ export function initWorksWheel(container, options = {}) {
   const endDrag = (event) => {
     if (!isPointerDown) return;
     isPointerDown = false;
-    try {
-      stageEl.releasePointerCapture(event.pointerId);
-    } catch (_) {}
+    if (isCaptured) {
+      try {
+        stageEl.releasePointerCapture(event.pointerId);
+      } catch (_) {}
+      isCaptured = false;
+    }
+    activePointerId = null;
     if (target > 1) {
       to(Math.round(target));
     }
