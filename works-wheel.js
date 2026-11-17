@@ -132,7 +132,10 @@ export function initWorksWheel(container, options = {}) {
     img.alt = item.title;
     img.draggable = false;
     img.className = "w-full h-full object-cover select-none pointer-events-none";
-    img.loading = "eager";
+    // The Recognition wheel sits well below the fold — defer its thumbnails so
+    // they don't compete with the hero on first load.
+    img.loading = "lazy";
+    img.decoding = "async";
 
     face.appendChild(img);
 

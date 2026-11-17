@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>Suchi Bansal — Senior Product Manager | AI & Enterprise Products</title>
+
+  <!-- Preload the LCP hero portrait so it paints as early as possible -->
+  <link rel="preload" as="image" href="assets/portrait-dark.webp" fetchpriority="high">
   <meta name="description" content="Suchi Bansal is a Senior Product Manager with 11+ years building AI-powered consumer and enterprise products used by millions. She owns a $180M+ enterprise software portfolio at Canon India and previously led AI consumer experiences at Samsung Research serving 7M+ users.">
 
   <!-- Canonical & crawl directives (GEO / AEO) -->
@@ -52,7 +55,7 @@
         "jobTitle": "Senior Product Manager",
         "description": "Product Management professional with 11+ years of experience delivering AI-powered consumer and enterprise software products used by millions. Leads commercialization and revenue growth for a $180M+ enterprise software portfolio at Canon India ($150M revenue); previously led AI-powered consumer experiences at Samsung Research Institute serving 7M+ global users.",
         "url": "https://www.suchibansal.com/",
-        "image": "https://www.suchibansal.com/assets/hero_portrait.png",
+        "image": "https://www.suchibansal.com/assets/portrait-light.webp",
         "email": "mailto:suchiban07@gmail.com",
         "address": {
           "@type": "PostalAddress",
@@ -229,29 +232,9 @@
   }
   </script>
 
-  <!-- Tailwind CSS v3 with Plugins -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
-          },
-          colors: {
-            brand: {
-              black: '#0D0D0D',
-              dark: '#141414',
-              gray: '#7A7A7A',
-              light: '#F8F9FA',
-              border: '#E5E5E5'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Tailwind CSS — precompiled static build (replaces the render-blocking
+       cdn.tailwindcss.com runtime JIT compiler). Rebuild: npm run build:css -->
+  <link rel="stylesheet" href="assets/tw.css?v=1">
 
   <!-- Typography & Gradients Stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -743,24 +726,28 @@
       <!-- Center Column: Stylized Black and White Headshot (in front of text) -->
       <div class="md:col-span-6 flex justify-center order-1 md:order-2 relative z-10 -mt-16 md:-mt-36">
         <div class="relative w-[320px] h-[400px] md:w-[480px] md:h-[580px] flex items-end justify-center hero-portrait-mask">
-          <!-- Dark portrait (base layer) -->
+          <!-- Dark portrait (base layer) — the LCP, so load it first -->
           <img src="assets/portrait-dark.webp"
                alt="Suchi Bansal — Senior Product Manager"
+               fetchpriority="high" decoding="async"
                class="hero-portrait-img" />
           <!-- Light portrait (crossfades in over the dark one: dark → light) -->
           <img src="assets/portrait-light.webp"
                alt=""
                aria-hidden="true"
+               decoding="async"
                class="hero-portrait-img hero-portrait-fade" />
-          <!-- Red rim-light portrait (fades in only once scrolling begins) -->
+          <!-- Red rim-light portrait (fades in only once scrolling begins — low priority) -->
           <img src="assets/portrait-scroll.webp"
                alt=""
                aria-hidden="true"
+               fetchpriority="low" decoding="async"
                class="hero-portrait-img hero-portrait-scroll" />
-          <!-- Colored portrait (comes to life on hover / touch, grayscale otherwise) -->
+          <!-- Colored portrait (comes to life on hover / touch — low priority) -->
           <img src="assets/portrait-color.webp"
                alt=""
                aria-hidden="true"
+               fetchpriority="low" decoding="async"
                class="hero-portrait-img hero-portrait-color" />
           <!-- Double-click heart: pops, then snaps the portrait back to black & white -->
           <svg class="hero-heart" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -2202,7 +2189,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=4';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=5';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');
