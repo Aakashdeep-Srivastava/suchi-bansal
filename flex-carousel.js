@@ -110,7 +110,20 @@ export const DEFAULT_ITEMS = [
     narration: 'assets/narration/ultra-data-saving.mp3',
     video: 'assets/ultra-data-saving.mp4',
     images: [ 'Project Images/uds-shot-1.jpg' ],
-    tools: ['Product Requirements', 'Backlog Prioritization', 'Agile Delivery', 'Analytics'],
+    scope: [
+      { title: 'Uncovering Market Gaps & User Pain Points', detail: 'Ran competitive analysis and user research on data-consumption patterns across India and APAC; identified pain points around high mobile-data costs, and partnered with network operators to validate data-compression opportunities.' },
+      { title: 'Crafting a Strategic Vision', detail: 'Defined the Ultra Data Saving (UDS) roadmap aligned to Samsung’s mobile strategy for emerging markets — advocating data compression, background-data restriction, and app-level optimizations as key differentiators.' },
+      { title: 'Building & Refining a High-Impact Feature', detail: 'Designed a seamless, low-friction UX to enable/disable data saving, working with UX/UI to surface real-time data-saving insights and notifications.' },
+      { title: 'Driving Cross-Team Execution', detail: 'Led discussions with OS and app developers to ensure smooth functionality without disrupting critical app performance, and worked with legal & policy teams to comply with regional data regulations.' },
+      { title: 'Shaping the User Journey & Adoption', detail: 'Built onboarding tutorials and in-device prompts for adoption, and partnered with marketing to position UDS as a key selling point for budget-conscious users.' }
+    ],
+    highlights: [
+      'User benefits & adoption — a meaningful reduction in mobile-data consumption that lets users stretch their data plans, with high adoption among prepaid users across India and APAC.',
+      'Business & market impact — strengthened Samsung’s position in budget and mid-range segments and created competitive differentiation in emerging markets against brands like Xiaomi and Realme.',
+      'Engagement & retention — ~60% adoption among target users relying on the feature for data efficiency, boosting Samsung loyalty and device stickiness.',
+      'Ecosystem & partner benefits — optimized bandwidth consumption for network operators and opened the door to operator partnerships offering exclusive data benefits for Samsung users (e.g. Airtel, Vodafone).'
+    ],
+    tools: ['Product Discovery', 'User Research', 'Data Compression', 'UX Design', 'GTM Strategy', 'Analytics'],
     link: 'https://www.linkedin.com/in/suchi-bansal-productmanager-ai',
     linkLabel: 'Connect on LinkedIn ↗'
   },
