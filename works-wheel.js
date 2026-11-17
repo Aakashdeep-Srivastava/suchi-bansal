@@ -35,6 +35,18 @@ function place(ringDeg, drumDeg, ringR, drumR, bow, m) {
 
 export const DEFAULT_WORKS = [
   {
+    title: "Product Space GenAI Hackathon",
+    subtitle: "ReachifyMe — US Market Expansion Strategy",
+    description: "A US market-expansion GTM for ReachifyMe — a multi-channel acquisition plan targeting 100+ paid users at $14/month with 65% gross margins. Growing through organic channels (Reddit, Twitter, incubators & accelerators) cut customer acquisition cost from $200 to $50.",
+    image: "Landing Page Assest/reachifyme-gtm.png",
+    src: "Landing Page Assest/reachifyme-gtm.png",
+    stats: "100+ paid users target • $14/mo • 65% gross margin • CAC $200 → $50",
+    tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
+    deliverables: ["Multi-Channel Acquisition Plan", "Organic Growth (Reddit, X, Accelerators)", "Unit Economics & Margins"],
+    link: "https://drive.google.com/file/d/1Sfnlhc80Fi1jH4P0I6wBTrbXdB41NpC8/view",
+    linkLabel: "View the strategy ↗"
+  },
+  {
     title: "Samsung Health AI",
     subtitle: "Medication, Snore & Sleep Coach",
     description: "AI-powered digital health features across Samsung mobile and wearables — Medication Tracking, Snore Detection, and Sleep Coach — serving 7M+ global users.",
@@ -44,17 +56,6 @@ export const DEFAULT_WORKS = [
     stats: "7M+ Users • 25% Adoption in 6 Months • 200%+ QoQ Watch Growth",
     tools: ["LLM/RAG", "Machine Learning", "Jira", "Mixpanel"],
     deliverables: ["Product Vision & Roadmap", "AI Feature Discovery", "Adoption & Engagement Analytics"]
-  },
-  {
-    title: "Make for India",
-    subtitle: "Ultra Data Saving & S-Bike Mode",
-    description: "Flagship localized smartphone features driving 60% and 50% user adoption and supporting 8M+ device sales across Samsung's affordable portfolio.",
-    image: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.43\u202fPM.png",
-    src: "Landing Page Assest/Screenshot 2026-10-20 at 7.46.43\u202fPM.png",
-    href: "#make-for-india",
-    stats: "UDS 60% • S-Bike Mode 50% • 8M+ Devices Sold",
-    tools: ["Agile", "Azure DevOps", "Google Analytics", "Tableau"],
-    deliverables: ["Product Requirements", "Backlog Prioritization", "Agile Delivery with Engineering"]
   },
   {
     title: "Market Intelligence Board",
