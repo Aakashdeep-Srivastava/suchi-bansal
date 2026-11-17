@@ -208,9 +208,30 @@ export async function initExperienceSection() {
   onScroll();
 }
 
-// Auto-boot upon DOM ready
+// Boot lazily: only pull the (heavy) StringTune runtime when the Experience
+// section is approaching the viewport, so it never competes with the hero on
+// first load. Looks/behaves identically — it's initialised well before the user
+// scrolls to it (1.5 viewports of lead time), and the static layout renders
+// regardless since StringTune only adds the scroll-driven motion.
+function bootExperienceWhenNear() {
+  const section = document.getElementById('experience');
+  if (!section || !('IntersectionObserver' in window)) {
+    initExperienceSection(); // fallback: boot immediately
+    return;
+  }
+  let booted = false;
+  const io = new IntersectionObserver((entries) => {
+    if (entries.some((e) => e.isIntersecting) && !booted) {
+      booted = true;
+      io.disconnect();
+      initExperienceSection();
+    }
+  }, { rootMargin: '150% 0px' }); // start ~1.5 screens ahead of the section
+  io.observe(section);
+}
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initExperienceSection);
+  document.addEventListener('DOMContentLoaded', bootExperienceWhenNear);
 } else {
-  initExperienceSection();
+  bootExperienceWhenNear();
 }
