@@ -77,14 +77,25 @@ export const DEFAULT_WORKS = [
     description: "EcoCreds – a platform that incentivizes sustainable actions like green travel, eco-friendly hotel stays, and low-impact events through a gamified rewards system. The strategy: incentivize 100K+ sustainable actions and run carbon-credit programs across 50+ businesses in transport, hospitality, and events, contributing to a 15–20% reduction in carbon footprint.",
     image: "Landing Page Assest/ecocreds.png",
     src: "Landing Page Assest/ecocreds.png",
-    deck: {
-      label: "Winner Certificate",
-      title: "EcoCreds — CESD Sustainability Hackathon 2025",
-      pdf: "Landing Page Assest/EcoCreds-Certificate-Suchi-Bansal.pdf",
-      ratio: "756 / 553",
-      liveUrl: "https://xecocreds.vercel.app/",
-      liveLabel: "Live App",
-      slides: ["Landing Page Assest/ecocreds-certificate/certificate-01.webp"]
+    project: {
+      category: "SUSTAINABILITY · CESD HACKATHON 2025 — WINNER",
+      title: "EcoCreds",
+      description: "EcoCreds is a sustainability platform that rewards verified eco-friendly actions and links them to real carbon-credit programs — winner of the CESD Sustainability Hackathon 2025 at Goa Institute of Management, and now shipped as a live product (CarbonGero) on the Algorand blockchain.",
+      highlights: [
+        "Rewards everyday sustainable choices — green travel, eco-friendly hotel stays, and low-impact events — through a gamified credits system.",
+        "Runs carbon-credit programs for businesses across transport, hospitality, and events.",
+        "Targets 100K+ verified sustainable actions across 50+ businesses, aiming for a 15–20% carbon-footprint reduction.",
+        "B2B and B2C monetization through subscriptions and corporate partnerships.",
+        "Now live as CarbonGero — transparent, audit-ready creation, verification, and trading of carbon credits on Algorand."
+      ],
+      certificate: {
+        image: "Landing Page Assest/ecocreds-certificate/certificate-01.webp",
+        pdf: "Landing Page Assest/EcoCreds-Certificate-Suchi-Bansal.pdf",
+        ratio: "756 / 553"
+      },
+      tools: ["Product Discovery", "Gamification", "Carbon Credits", "Blockchain (Algorand)", "Go-to-Market"],
+      link: "https://xecocreds.vercel.app/",
+      linkLabel: "Visit Live App ↗"
     },
     stats: "100K+ Sustainable Actions · 50+ Businesses · 15–20% Footprint Cut",
     tools: ["Product Discovery", "Gamification", "Carbon Credits", "GTM"],

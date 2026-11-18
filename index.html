@@ -1571,6 +1571,17 @@
           </div>
         `;
       }
+      if (data.certificate && data.certificate.image) {
+        html += `
+          <div>
+            <h4 class="text-xs font-bold uppercase tracking-wider text-black mb-2 text-center">Winner Certificate</h4>
+            <button type="button" data-open-cert class="block w-full rounded-2xl overflow-hidden border border-neutral-200 bg-neutral-50 hover:border-neutral-500 transition cursor-zoom-in">
+              <img src="${data.certificate.image}" alt="${title} — winner certificate" loading="lazy" class="w-full h-auto object-contain" />
+            </button>
+            <p class="text-[10px] text-neutral-400 text-center mt-1.5">Tap to view full certificate</p>
+          </div>
+        `;
+      }
       if (data.deliverables && data.deliverables.length) {
         html += `
           <div>
@@ -1603,6 +1614,20 @@
 
       document.getElementById('modal-project-body').innerHTML = html;
       setupNarration();
+
+      // Clicking the certificate opens it full-screen in the deck viewer.
+      const certBtn = document.querySelector('#modal-project-body [data-open-cert]');
+      if (certBtn && data.certificate && window.openDeckModal) {
+        certBtn.addEventListener('click', () => {
+          window.openDeckModal({
+            label: 'Winner Certificate',
+            title: data.title || 'Certificate',
+            pdf: data.certificate.pdf,
+            ratio: data.certificate.ratio || '16 / 9',
+            slides: [data.certificate.image]
+          });
+        });
+      }
 
       const modal = document.getElementById('project-modal');
       const card = document.getElementById('project-modal-card');
@@ -2065,7 +2090,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=9';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=10';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');
@@ -2075,9 +2100,12 @@
           label: "Works '26",
           action: "",
           onSelect: (index, item) => {
-            // Tapping the card opens it directly: a deck opens the in-page pitch-deck viewer,
-            // a linked recognition opens its link, otherwise the project detail modal.
-            if (item.deck && window.openDeckModal) {
+            // Tapping the card: a rich write-up (project) opens the detail modal
+            // (description + certificate + live app); a plain deck opens the
+            // pitch-deck viewer; a bare link opens directly; else the project modal.
+            if (item.project && window.openProjectModal) {
+              window.openProjectModal(item.project);
+            } else if (item.deck && window.openDeckModal) {
               window.openDeckModal(item.deck);
             } else if (item.link) {
               window.open(item.link, '_blank', 'noopener');

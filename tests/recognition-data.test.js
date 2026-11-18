@@ -19,14 +19,14 @@ describe('DEFAULT_WORKS — structure', () => {
     }
   });
 
-  it('all three cards open a document (deck) — no dead cards', () => {
-    const withDeck = DEFAULT_WORKS.filter((i) => i.deck);
-    expect(withDeck).toHaveLength(3);
+  it('every card opens something — a deck, a rich project, or a link (no dead cards)', () => {
+    const live = DEFAULT_WORKS.filter((i) => i.deck || i.project || i.link);
+    expect(live).toHaveLength(3);
   });
 });
 
 describe('DEFAULT_WORKS — deck configuration', () => {
-  for (const item of DEFAULT_WORKS) {
+  for (const item of DEFAULT_WORKS.filter((i) => i.deck)) {
     describe(`deck: ${item.title.slice(0, 32)}`, () => {
       const deck = item.deck;
 
@@ -55,6 +55,39 @@ describe('DEFAULT_WORKS — deck configuration', () => {
       it('every referenced slide image exists on disk', () => {
         for (const s of deck.slides) {
           expect(existsSync(s), `missing slide: ${s}`).toBe(true);
+        }
+      });
+    });
+  }
+});
+
+describe('DEFAULT_WORKS — rich project cards (description + certificate + live app)', () => {
+  for (const item of DEFAULT_WORKS.filter((i) => i.project)) {
+    describe(`project: ${item.title.slice(0, 32)}`, () => {
+      const p = item.project;
+
+      it('has a title, description and at least 3 highlight points', () => {
+        expect(typeof p.title).toBe('string');
+        expect(typeof p.description).toBe('string');
+        expect(p.description.length).toBeGreaterThan(40);
+        expect(Array.isArray(p.highlights)).toBe(true);
+        expect(p.highlights.length).toBeGreaterThanOrEqual(3);
+      });
+
+      it('links to a live app over https', () => {
+        expect(p.link).toMatch(/^https:\/\//);
+      });
+
+      it('has a certificate whose image and PDF exist on disk', () => {
+        expect(p.certificate).toBeTruthy();
+        expect(p.certificate.image).toMatch(/\.webp$/);
+        expect(existsSync(p.certificate.image), `missing cert image: ${p.certificate.image}`).toBe(true);
+        expect(existsSync(p.certificate.pdf), `missing cert pdf: ${p.certificate.pdf}`).toBe(true);
+      });
+
+      it('uses a valid certificate ratio when specified', () => {
+        if (p.certificate.ratio !== undefined) {
+          expect(p.certificate.ratio).toMatch(/^\s*\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?\s*$/);
         }
       });
     });
