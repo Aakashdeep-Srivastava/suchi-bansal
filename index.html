@@ -1308,6 +1308,10 @@
       </div>
       <div class="flex items-center gap-2 shrink-0 pointer-events-auto">
         <span id="deck-modal-counter" class="inline-flex items-center px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-[10px] font-mono tracking-wider text-white/90">01 / 14</span>
+        <a id="deck-modal-live" href="#" target="_blank" rel="noopener" title="Open the live application" class="hidden items-center gap-1.5 px-3.5 h-9 rounded-full bg-white text-black text-[11px] font-bold tracking-wider uppercase hover:bg-neutral-200 transition" aria-label="Open the live application">
+          <span>Live App</span>
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5h5v5m0-5L10 14M19 13v6H5V5h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        </a>
         <a id="deck-modal-open" href="#" target="_blank" rel="noopener" title="Open the PDF in a new tab" class="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-full bg-black/40 backdrop-blur-md border border-white/15 text-white/80 hover:text-white hover:bg-black/60 transition" aria-label="Open PDF in new tab">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 5h5v5m0-5L10 14M19 13v6H5V5h6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
         </a>
@@ -1789,10 +1793,22 @@
       const counter = document.getElementById('deck-modal-counter');
       counter.textContent = `01 / ${String(total).padStart(2, '0')}`;
 
-      // "Open in new tab" is the only PDF action now (no Download button).
+      // "Open in new tab" opens the source PDF.
       const openBtn = document.getElementById('deck-modal-open');
       if (deck.pdf) { openBtn.href = deck.pdf; openBtn.classList.remove('hidden'); }
       else { openBtn.classList.add('hidden'); }
+
+      // Optional "Live App" button → the deployed application for this recognition.
+      const liveBtn = document.getElementById('deck-modal-live');
+      if (deck.liveUrl) {
+        liveBtn.href = deck.liveUrl;
+        liveBtn.querySelector('span').textContent = deck.liveLabel || 'Live App';
+        liveBtn.classList.remove('hidden');
+        liveBtn.classList.add('inline-flex');
+      } else {
+        liveBtn.classList.add('hidden');
+        liveBtn.classList.remove('inline-flex');
+      }
 
       // Slides default to 16:9; a deck (e.g. a certificate) can set its own ratio.
       pages.style.setProperty('--slide-ratio', deck.ratio || '16 / 9');
@@ -2049,7 +2065,7 @@
 
   <!-- WorksWheel 3D Drum Reel Initialization -->
   <script type="module">
-    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=8';
+    import { initWorksWheel, DEFAULT_WORKS } from './works-wheel.js?v=9';
 
     function startWorksWheel() {
       const container = document.getElementById('works-wheel-container');

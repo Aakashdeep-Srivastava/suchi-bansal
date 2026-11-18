@@ -82,6 +82,8 @@ export const DEFAULT_WORKS = [
       title: "EcoCreds — CESD Sustainability Hackathon 2025",
       pdf: "Landing Page Assest/EcoCreds-Certificate-Suchi-Bansal.pdf",
       ratio: "756 / 553",
+      liveUrl: "https://xecocreds.vercel.app/",
+      liveLabel: "Live App",
       slides: ["Landing Page Assest/ecocreds-certificate/certificate-01.webp"]
     },
     stats: "100K+ Sustainable Actions · 50+ Businesses · 15–20% Footprint Cut",
