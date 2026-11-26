@@ -39,15 +39,32 @@ export const DEFAULT_WORKS = [
     title: "ReachifyMe: Product Space GenAI Hackathon Winner",
     subtitle: "US Market Expansion Strategy",
     description: "A US market-expansion GTM for ReachifyMe – a multi-channel acquisition plan targeting 100+ paid users at $14/month with 65% gross margins. Growing through organic channels (Reddit, Twitter, incubators & accelerators) cut customer acquisition cost from $200 to $50.",
-    image: "Landing Page Assest/reachifyme-gtm.png",
-    src: "Landing Page Assest/reachifyme-gtm.png",
-    deck: {
-      label: "Go-To-Market Strategy",
+    image: "Landing Page Assest/reachifyme-gtm.gif",
+    src: "Landing Page Assest/reachifyme-gtm.gif",
+    // Tapping the card opens the rich write-up (summary → key details → deck button),
+    // mirroring EcoCreds. The pitch/strategy PDF is reachable from the deck button.
+    project: {
+      category: "PRODUCT SPACE · GENAI HACKATHON — WINNER",
       title: "ReachifyMe",
-      pdf: "Landing Page Assest/ReachifyMe-Go-To-Market-Strategy.pdf",
-      slides: Array.from({ length: 14 }, (_, i) =>
-        `Landing Page Assest/reachifyme-deck/slide-${String(i + 1).padStart(2, "0")}.webp`
-      )
+      description: "Suchi's winning US market-expansion strategy for ReachifyMe — a multi-channel go-to-market plan to launch the product in the US at $14/month, reach 100+ paying users at 65% gross margins, and drive customer-acquisition cost from $200 down to $50.",
+      highlights: [
+        "Winner of the Product Space GenAI Hackathon for the strongest US go-to-market strategy.",
+        "Priced at $14/month on clean, defensible unit economics with 65% gross margins.",
+        "Cut customer-acquisition cost from $200 to $50 by prioritising organic channels — Reddit, X/Twitter, and startup incubators & accelerators — over paid ads.",
+        "Set a focused first milestone of 100+ paying users with a channel-by-channel acquisition plan.",
+        "Positioned the product for a US audience with sharp messaging and a staged launch roadmap."
+      ],
+      stats: "100+ paid users · $14/mo · 65% gross margin · CAC $200 → $50",
+      tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
+      deck: {
+        label: "Go-To-Market Strategy",
+        title: "ReachifyMe",
+        pdf: "Landing Page Assest/ReachifyMe-Go-To-Market-Strategy.pdf",
+        slides: Array.from({ length: 14 }, (_, i) =>
+          `Landing Page Assest/reachifyme-deck/slide-${String(i + 1).padStart(2, "0")}.webp`
+        )
+      },
+      deckLabel: "View Go-To-Market Deck ↗"
     },
     stats: "100+ paid users · $14/mo · 65% gross margin · CAC $200 → $50",
     tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
@@ -59,13 +76,30 @@ export const DEFAULT_WORKS = [
     description: "EcoVoyage – a scalable B2B and B2C Carbon Offset as a Service platform with subscription and corporate-partnership monetization, targeting ₹150+ Crore revenue within three years. Winner at Mind the Product's E-Summit '25 (Synergy of Genesis).",
     image: "Landing Page Assest/ecovoyage.png",
     src: "Landing Page Assest/ecovoyage.png",
-    deck: {
-      label: "Eco Ventures — Pitch Deck",
+    // Tapping the card opens the rich write-up (summary → key details → deck button),
+    // mirroring EcoCreds. The pitch deck PDF is reachable from the deck button.
+    project: {
+      category: "MIND THE PRODUCT · E-SUMMIT '25 — WINNER",
       title: "EcoVoyage",
-      pdf: "Landing Page Assest/EcoVoyage-Eco-Ventures.pdf",
-      slides: Array.from({ length: 13 }, (_, i) =>
-        `Landing Page Assest/ecovoyage-deck/slide-${String(i + 1).padStart(2, "0")}.webp`
-      )
+      description: "Suchi's winning pitch for EcoVoyage — a Carbon Offset as a Service platform built for both businesses and individuals, monetised through subscriptions and corporate partnerships, with a path to ₹150+ Crore in revenue within three years. Winner at Mind the Product's E-Summit '25 (Synergy of Genesis).",
+      highlights: [
+        "Winner at Mind the Product's E-Summit '25 (Synergy of Genesis).",
+        "Carbon Offset as a Service — one platform serving both businesses (B2B) and individuals (B2C).",
+        "Dual monetisation through recurring subscriptions and corporate-partnership deals.",
+        "Modelled a ₹150+ Crore revenue target within three years, backed by a staged go-to-market plan.",
+        "Framed sustainability as a scalable product, not a one-off initiative."
+      ],
+      stats: "₹150+ Crore 3-Year Target · B2B/B2C Monetization · Carbon Offset SaaS",
+      tools: ["Product Vision", "Monetization", "Partnerships", "GTM"],
+      deck: {
+        label: "Eco Ventures — Pitch Deck",
+        title: "EcoVoyage",
+        pdf: "Landing Page Assest/EcoVoyage-Eco-Ventures.pdf",
+        slides: Array.from({ length: 19 }, (_, i) =>
+          `Landing Page Assest/ecovoyage-deck/slide-${String(i + 1).padStart(2, "0")}.webp`
+        )
+      },
+      deckLabel: "View Pitch Deck ↗"
     },
     stats: "₹150+ Crore 3-Year Target · B2B/B2C Monetization · Carbon Offset SaaS",
     tools: ["Product Vision", "Monetization", "Partnerships", "GTM"],

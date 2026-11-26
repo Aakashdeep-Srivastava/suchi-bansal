@@ -1,0 +1,5 @@
+# Recognition deck / certificate source PDFs are kept in the repo only as the
+# source for the rendered WebP slides — they are intentionally NOT deployed, so
+# the decks stay view-only (fast slides) and the PDFs can't be downloaded.
+# The résumé (assets/Suchi-Bansal-Resume.pdf) is deliberately NOT ignored.
+Landing Page Assest/*.pdf

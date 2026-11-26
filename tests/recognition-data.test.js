@@ -25,8 +25,13 @@ describe('DEFAULT_WORKS — structure', () => {
   });
 });
 
+// A deck can live at the top level (legacy) or nested inside a rich project card.
+const deckItems = DEFAULT_WORKS
+  .map((i) => ({ title: i.title, deck: i.deck || (i.project && i.project.deck) }))
+  .filter((i) => i.deck);
+
 describe('DEFAULT_WORKS — deck configuration', () => {
-  for (const item of DEFAULT_WORKS.filter((i) => i.deck)) {
+  for (const item of deckItems) {
     describe(`deck: ${item.title.slice(0, 32)}`, () => {
       const deck = item.deck;
 
@@ -61,7 +66,7 @@ describe('DEFAULT_WORKS — deck configuration', () => {
   }
 });
 
-describe('DEFAULT_WORKS — rich project cards (description + certificate + live app)', () => {
+describe('DEFAULT_WORKS — rich project cards (summary + key details + deck/certificate)', () => {
   for (const item of DEFAULT_WORKS.filter((i) => i.project)) {
     describe(`project: ${item.title.slice(0, 32)}`, () => {
       const p = item.project;
@@ -74,20 +79,35 @@ describe('DEFAULT_WORKS — rich project cards (description + certificate + live
         expect(p.highlights.length).toBeGreaterThanOrEqual(3);
       });
 
-      it('links to a live app over https', () => {
-        expect(p.link).toMatch(/^https:\/\//);
+      it('opens a destination — a deck, a certificate, or a live link (no dead modal)', () => {
+        const opensSomething =
+          (p.deck && Array.isArray(p.deck.slides) && p.deck.slides.length) ||
+          (p.certificate && p.certificate.image) ||
+          (typeof p.link === 'string' && p.link.length);
+        expect(opensSomething).toBeTruthy();
       });
 
-      it('has a certificate whose image and PDF exist on disk', () => {
-        expect(p.certificate).toBeTruthy();
-        expect(p.certificate.image).toMatch(/\.webp$/);
-        expect(existsSync(p.certificate.image), `missing cert image: ${p.certificate.image}`).toBe(true);
-        expect(existsSync(p.certificate.pdf), `missing cert pdf: ${p.certificate.pdf}`).toBe(true);
+      it('uses an https URL when a live link is specified', () => {
+        if (p.link !== undefined) {
+          expect(p.link).toMatch(/^https:\/\//);
+        }
       });
 
-      it('uses a valid certificate ratio when specified', () => {
-        if (p.certificate.ratio !== undefined) {
-          expect(p.certificate.ratio).toMatch(/^\s*\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?\s*$/);
+      it('has a deck label whenever it carries a deck', () => {
+        if (p.deck) {
+          expect(typeof p.deckLabel).toBe('string');
+          expect(p.deckLabel.length).toBeGreaterThan(0);
+        }
+      });
+
+      it('has a certificate whose image and PDF exist on disk, when one is specified', () => {
+        if (p.certificate) {
+          expect(p.certificate.image).toMatch(/\.webp$/);
+          expect(existsSync(p.certificate.image), `missing cert image: ${p.certificate.image}`).toBe(true);
+          expect(existsSync(p.certificate.pdf), `missing cert pdf: ${p.certificate.pdf}`).toBe(true);
+          if (p.certificate.ratio !== undefined) {
+            expect(p.certificate.ratio).toMatch(/^\s*\d+(\.\d+)?\s*\/\s*\d+(\.\d+)?\s*$/);
+          }
         }
       });
     });
