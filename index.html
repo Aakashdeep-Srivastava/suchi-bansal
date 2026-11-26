@@ -1940,12 +1940,9 @@
       }
     });
 
-    // Web3Forms access key — get a FREE one (no account) by entering suchiban07@gmail.com
-    // at https://web3forms.com, then paste the emailed key here. Submissions will then be
-    // delivered straight to suchiban07@gmail.com. Until it's set, the form falls back to
-    // opening the visitor's email app (mailto).
-    const WEB3FORMS_ACCESS_KEY = 'd6140d58-57c4-476c-af4a-490c99d80055';
-
+    // Contact form → Resend, via the /api/contact serverless function (which holds
+    // the RESEND_API_KEY server-side). If that call fails for any reason, we fall
+    // back to opening the visitor's mail app so a message is never silently lost.
     async function submitContactForm(e) {
       e.preventDefault();
       const name = document.getElementById('contact-name').value.trim();
@@ -1964,32 +1961,21 @@
         document.getElementById('contact-form').reset();
       }
 
-      // No real key configured yet → fall back to the visitor's mail app.
-      if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === 'YOUR_WEB3FORMS_ACCESS_KEY') {
-        mailtoFallback();
-        return;
-      }
-
       const original = btn ? btn.innerHTML : '';
       if (btn) { btn.disabled = true; btn.innerHTML = 'SENDING…'; }
       try {
-        const res = await fetch('https://api.web3forms.com/submit', {
+        const res = await fetch('/api/contact', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_ACCESS_KEY,
-            subject,
-            from_name: 'Suchi Bansal — Portfolio',
-            name, email, phone: phone || '—', topic: service, message, replyto: email
-          })
+          body: JSON.stringify({ name, email, phone, topic: service, message })
         });
-        const data = await res.json();
-        if (data.success) {
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success) {
           closeContactModal();
           showToast(`Thanks, ${name}! Your message has been sent to Suchi.`);
           document.getElementById('contact-form').reset();
         } else {
-          throw new Error(data.message || 'Submission failed');
+          throw new Error(data.error || 'Submission failed');
         }
       } catch (err) {
         mailtoFallback(); // network/API failure → still let them reach Suchi
