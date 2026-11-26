@@ -109,8 +109,8 @@ export const DEFAULT_WORKS = [
     title: "EcoCreds: CESD Sustainability Hackathon 2025 Winner",
     subtitle: "Centre for Excellence in Sustainable Development",
     description: "EcoCreds – a platform that incentivizes sustainable actions like green travel, eco-friendly hotel stays, and low-impact events through a gamified rewards system. The strategy: incentivize 100K+ sustainable actions and run carbon-credit programs across 50+ businesses in transport, hospitality, and events, contributing to a 15–20% reduction in carbon footprint.",
-    image: "Landing Page Assest/ecocreds.png",
-    src: "Landing Page Assest/ecocreds.png",
+    image: "Landing Page Assest/ecocreds.webp",
+    src: "Landing Page Assest/ecocreds.webp",
     project: {
       category: "SUSTAINABILITY · CESD HACKATHON 2025 — WINNER",
       title: "EcoCreds",
