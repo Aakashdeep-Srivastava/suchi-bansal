@@ -54,7 +54,6 @@ export const DEFAULT_WORKS = [
         "Set a focused first milestone of 100+ paying users with a channel-by-channel acquisition plan.",
         "Positioned the product for a US audience with sharp messaging and a staged launch roadmap."
       ],
-      stats: "100+ paid users · $14/mo · 65% gross margin · CAC $200 → $50",
       tools: ["GTM Strategy", "Pricing & Packaging", "Growth", "Positioning"],
       deck: {
         label: "Go-To-Market Strategy",
@@ -89,7 +88,6 @@ export const DEFAULT_WORKS = [
         "Modelled a ₹150+ Crore revenue target within three years, backed by a staged go-to-market plan.",
         "Framed sustainability as a scalable product, not a one-off initiative."
       ],
-      stats: "₹150+ Crore 3-Year Target · B2B/B2C Monetization · Carbon Offset SaaS",
       tools: ["Product Vision", "Monetization", "Partnerships", "GTM"],
       deck: {
         label: "Eco Ventures — Pitch Deck",
