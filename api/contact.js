@@ -55,24 +55,86 @@ export default async function handler(req, res) {
   const from = process.env.CONTACT_FROM || 'Suchi Bansal Portfolio <onboarding@resend.dev>';
   const subject = `New inquiry: ${topic} — ${name}`;
 
+  const received = (() => {
+    try {
+      return new Date().toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short'
+      }) + ' IST';
+    } catch { return new Date().toUTCString(); }
+  })();
+  const replyHref = `mailto:${email}?subject=${encodeURIComponent('Re: your inquiry — Suchi Bansal')}`;
+
   const text =
-    `New message from the portfolio contact form\n\n` +
-    `Name: ${name}\n` +
-    `Email: ${email}\n` +
-    (phone ? `Phone: ${phone}\n` : '') +
-    `Topic: ${topic}\n\n` +
-    `${message}\n`;
+    `NEW PORTFOLIO INQUIRY — ${topic}\n` +
+    `------------------------------------------------\n\n` +
+    `Name:     ${name}\n` +
+    `Email:    ${email}\n` +
+    (phone ? `Phone:    ${phone}\n` : '') +
+    `Topic:    ${topic}\n` +
+    `Received: ${received}\n\n` +
+    `Message:\n${message}\n\n` +
+    `------------------------------------------------\n` +
+    `Reply directly to this email to reach ${name}.\n\n` +
+    `Suchi Bansal — Senior Product Manager, AI & Enterprise Products\n` +
+    `suchiban07@gmail.com · www.suchibansal.com\n`;
+
+  // Email-client-safe: table layout + inline styles only (no flex/grid/<style>).
+  const row = (label, value) =>
+    `<tr>` +
+      `<td style="padding:7px 0;width:94px;vertical-align:top;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8a8a8a;">${label}</td>` +
+      `<td style="padding:7px 0;font-size:15px;color:#111111;line-height:1.5;">${value}</td>` +
+    `</tr>`;
 
   const html =
-    `<div style="font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;font-size:15px;line-height:1.5;color:#111">` +
-    `<h2 style="margin:0 0 12px">New portfolio inquiry</h2>` +
-    `<p style="margin:4px 0"><strong>Name:</strong> ${esc(name)}</p>` +
-    `<p style="margin:4px 0"><strong>Email:</strong> <a href="mailto:${esc(email)}">${esc(email)}</a></p>` +
-    (phone ? `<p style="margin:4px 0"><strong>Phone:</strong> ${esc(phone)}</p>` : '') +
-    `<p style="margin:4px 0"><strong>Topic:</strong> ${esc(topic)}</p>` +
-    `<hr style="border:none;border-top:1px solid #eee;margin:14px 0"/>` +
-    `<p style="white-space:pre-wrap;margin:0">${esc(message)}</p>` +
-    `</div>`;
+`<div style="margin:0;padding:0;background:#f4f4f5;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 12px;">
+    <tr><td align="center">
+      <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid #e6e6e8;border-radius:16px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+
+        <tr><td style="background:#0d0d0d;padding:26px 32px;">
+          <div style="font-size:13px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:#ffffff;">Suchi&nbsp;Bansal</div>
+          <div style="font-size:12px;letter-spacing:.05em;color:#9a9a9a;margin-top:5px;">Portfolio &middot; suchibansal.com</div>
+        </td></tr>
+
+        <tr><td style="padding:28px 32px 6px;">
+          <h1 style="margin:0 0 12px;font-size:22px;font-weight:800;color:#0d0d0d;letter-spacing:-.01em;">New portfolio inquiry</h1>
+          <span style="display:inline-block;background:#0d0d0d;color:#ffffff;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 13px;border-radius:999px;">${esc(topic)}</span>
+        </td></tr>
+
+        <tr><td style="padding:16px 32px 4px;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            ${row('Name', esc(name))}
+            ${row('Email', `<a href="mailto:${esc(email)}" style="color:#0d0d0d;text-decoration:underline;">${esc(email)}</a>`)}
+            ${phone ? row('Phone', esc(phone)) : ''}
+            ${row('Received', esc(received))}
+          </table>
+        </td></tr>
+
+        <tr><td style="padding:14px 32px 4px;">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#8a8a8a;margin-bottom:8px;">Message</div>
+          <div style="border-left:3px solid #0d0d0d;background:#fafafa;padding:14px 16px;border-radius:0 10px 10px 0;font-size:15px;line-height:1.65;color:#222222;white-space:pre-wrap;">${esc(message)}</div>
+        </td></tr>
+
+        <tr><td style="padding:22px 32px 28px;">
+          <a href="${replyHref}" style="display:inline-block;background:#0d0d0d;color:#ffffff;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:13px 28px;border-radius:999px;">Reply to ${esc(name)}</a>
+          <div style="font-size:12px;color:#9a9a9a;margin-top:11px;">Or just hit reply — it goes straight to ${esc(name)}.</div>
+        </td></tr>
+
+        <tr><td style="background:#0d0d0d;padding:24px 32px;">
+          <div style="font-size:14px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#ffffff;">Suchi Bansal</div>
+          <div style="font-size:12px;color:#9a9a9a;margin-top:5px;line-height:1.6;">Senior Product Manager &middot; AI &amp; Enterprise Products</div>
+          <div style="font-size:12px;margin-top:11px;line-height:1.7;">
+            <a href="mailto:suchiban07@gmail.com" style="color:#ffffff;text-decoration:none;">suchiban07@gmail.com</a>
+            <span style="color:#555555;">&nbsp;&middot;&nbsp;</span>
+            <a href="https://www.suchibansal.com" style="color:#ffffff;text-decoration:none;">www.suchibansal.com</a>
+          </div>
+        </td></tr>
+
+      </table>
+      <div style="font-size:11px;color:#b5b5b8;margin-top:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">Sent from the contact form at suchibansal.com</div>
+    </td></tr>
+  </table>
+</div>`;
 
   try {
     const r = await fetch(RESEND_ENDPOINT, {
